@@ -41,6 +41,8 @@ const SHORT_LINKS = ['on.soundcloud.com', 'spotify.link', 'm.mixcloud.com'];
 
 export function toEmbed(input: string): Player {
   const raw = extractUrl(input.trim());
+  // Height of a pasted <iframe height="…">, if any (pasted widgets keep it)
+  const pastedHeight = Number(input.match(/height\s*=\s*["']?(\d+)/i)?.[1]) || null;
   let url: URL;
   try {
     url = new URL(raw);
@@ -64,10 +66,10 @@ export function toEmbed(input: string): Player {
     if (id) return { provider: 'beatport', name: 'Beatport', src: `https://embed.beatport.com/?id=${id}&type=track`, height: 162 };
   }
 
-  // SoundCloud: a pasted widget keeps its track but gets our parameters; a track/set page is wrapped
-  if (host === 'w.soundcloud.com') {
-    const track = url.searchParams.get('url');
-    if (track) return soundcloudPlayer(track);
+  // SoundCloud: a pasted widget (Share → Embed) is used as is, with its own parameters and height;
+  // a track/set page is wrapped in our dark "visual" player
+  if (host === 'w.soundcloud.com' && url.searchParams.get('url')) {
+    return { provider: 'soundcloud', name: 'SoundCloud', src: url.href, height: pastedHeight ?? 166 };
   }
   if (host === 'soundcloud.com' || host === 'm.soundcloud.com') {
     return soundcloudPlayer(`https://soundcloud.com${url.pathname.replace(/\/$/, '')}`);

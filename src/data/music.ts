@@ -181,8 +181,8 @@ export const releases: Release[] = [
 // (the first one keeps the section's light).
 export const sets: Embed[] = [
   {
-    // Embed code pasted by the team (SoundCloud → Share → Embed); toEmbed restyles it in the site's palette.
-    link: '<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2407457895&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>',
+    // Embed code pasted by the team (SoundCloud → Share → Embed, 2026-10-29): used as is (classic 166px player).
+    link: '<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2407457895&color=%231a1c1c&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>',
     title: 'Radio Silence – Best Warm Up',
   },
 ];
