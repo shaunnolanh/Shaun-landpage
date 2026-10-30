@@ -135,11 +135,18 @@ const links = [
   }
 
   .header__logo {
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     font-weight: 600;
     letter-spacing: var(--tracking-tight);
     text-transform: uppercase;
     text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 48rem) {
+    .header__logo {
+      font-size: var(--text-xl);
+    }
   }
 
   .header__nav ul {
