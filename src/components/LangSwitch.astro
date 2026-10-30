@@ -27,9 +27,8 @@ const t = useTranslations(lang);
     gap: 0.25rem;
     padding: 0;
     list-style: none;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
   }
 
   a {
@@ -37,17 +36,18 @@ const t = useTranslations(lang);
     place-items: center;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    color: var(--fog-300);
+    color: var(--text-70);
     text-decoration: none;
     border-radius: var(--radius-pill);
+    transition: color var(--duration) var(--ease);
   }
 
   a:hover {
-    color: var(--moon-100);
+    color: var(--text);
   }
 
   a[aria-current='true'] {
-    color: var(--moon-100);
-    box-shadow: inset 0 0 0 1px var(--blue-600);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
   }
 </style>

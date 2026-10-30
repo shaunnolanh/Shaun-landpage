@@ -9,11 +9,10 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const links = [
-  { href: '#music', label: t.nav.music },
-  { href: '#sets', label: t.nav.sets },
   { href: '#about', label: t.nav.about },
-  { href: '#booking', label: t.nav.booking },
-  { href: '#collabs', label: t.nav.collabs },
+  { href: '#music', label: t.nav.music },
+  { href: '#sets', label: t.nav.radioSilence },
+  { href: '#contact', label: t.nav.contact },
 ];
 ---
 
@@ -45,8 +44,8 @@ const links = [
 </header>
 
 <script>
-  // Mobile menu, active section and hide-on-scroll. Without JS the nav is still reachable
-  // because the anchors still work and the footer repeats the language switch.
+  // Transparent over the hero, solid past 20px of scroll; mobile menu; active section.
+  // Without JS the header is solid all the time (readable anywhere) and the anchors still work.
   const header = document.querySelector<HTMLElement>('.header');
   const toggle = header?.querySelector<HTMLButtonElement>('.header__toggle');
   const nav = header?.querySelector<HTMLElement>('.header__nav');
@@ -54,6 +53,10 @@ const links = [
   if (header && toggle && nav) {
     header.dataset.js = 'true';
     const label = toggle.querySelector('.visually-hidden')!;
+
+    const setScrolled = () => header.toggleAttribute('data-scrolled', window.scrollY > 20);
+    setScrolled();
+    window.addEventListener('scroll', setScrolled, { passive: true });
 
     const setOpen = (open: boolean) => {
       toggle.setAttribute('aria-expanded', String(open));
@@ -98,52 +101,29 @@ const links = [
       );
       sections.forEach((section) => sectionObserver.observe(section));
     }
-
-    // Hide on scroll down, show on scroll up, only past the hero. Never while the mobile menu is open,
-    // while focus is inside the header, or with reduced motion.
-    const hero = document.querySelector<HTMLElement>('.hero');
-    if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let lastY = window.scrollY;
-      let ticking = false;
-      const update = () => {
-        ticking = false;
-        const y = window.scrollY;
-        const pastHero = y > hero.offsetTop + hero.offsetHeight;
-        const locked = header.hasAttribute('data-open') || header.matches(':focus-within');
-        if (!pastHero || locked || y < lastY - 4) header.removeAttribute('data-hidden');
-        else if (y > lastY + 4) header.setAttribute('data-hidden', '');
-        lastY = y;
-      };
-      window.addEventListener(
-        'scroll',
-        () => {
-          if (!ticking) {
-            ticking = true;
-            requestAnimationFrame(update);
-          }
-        },
-        { passive: true },
-      );
-      // Tabbing into a hidden header brings it back
-      header.addEventListener('focusin', () => header.removeAttribute('data-hidden'));
-    }
   }
 </script>
 
 <style>
+  /* Fixed on top. Solid by default (no JS); with JS, transparent until 20px of scroll. */
   .header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    inset: 0 0 auto;
     z-index: 50;
-    background: color-mix(in srgb, var(--night-950) 82%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid color-mix(in srgb, var(--blue-600) 35%, transparent);
-    transition: transform 0.5s var(--ease-slow);
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--black) 95%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+      background-color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
   }
 
-  .header[data-hidden] {
-    transform: translateY(-100%);
+  .header[data-js]:not([data-scrolled]):not([data-open]) {
+    border-bottom-color: transparent;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .header__bar {
@@ -151,67 +131,36 @@ const links = [
     align-items: center;
     justify-content: space-between;
     gap: var(--space-s);
-    min-height: 3.5rem;
+    min-height: 4.5rem;
   }
 
   .header__logo {
-    font-family: var(--font-display);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
     text-transform: uppercase;
     text-decoration: none;
   }
 
   .header__nav ul {
     display: flex;
-    gap: var(--space-m);
+    gap: var(--space-l);
     padding: 0;
     list-style: none;
   }
 
   .header__nav a {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--fog-300);
-    transition: color 0.3s var(--ease-slow);
+    color: var(--text-70);
+    transition: color var(--duration) var(--ease);
   }
 
   .header__nav a:hover,
   .header__nav a[aria-current='true'] {
-    color: var(--moon-100);
-  }
-
-  /* Active section: a thin --blue-400 line under the link (not orange: the light stays in the content) */
-  .header__nav a {
-    position: relative;
-  }
-
-  .header__nav a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -0.4rem;
-    height: 1px;
-    background: var(--blue-400);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.5s var(--ease-slow);
-  }
-
-  .header__nav a[aria-current='true']::after {
-    transform: scaleX(1);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .header,
-    .header__nav a::after {
-      transition: none;
-    }
+    color: var(--text);
   }
 
   .header__tools {
@@ -233,10 +182,10 @@ const links = [
   .header__burger::before {
     display: block;
     width: 1.4rem;
-    height: 1px;
+    height: 1.5px;
     margin-inline: auto;
-    background: var(--moon-100);
-    transition: transform 0.3s var(--ease-slow);
+    background: var(--text);
+    transition: transform var(--duration) var(--ease);
   }
 
   .header__burger {
@@ -256,8 +205,12 @@ const links = [
     transform: rotate(-90deg);
   }
 
-  /* Mobile: collapse the nav behind the toggle (only when JS is running). */
+  /* Mobile: the nav drops down under the bar, behind the toggle (only when JS is running). */
   @media (max-width: 47.99rem) {
+    .header__nav ul {
+      gap: var(--space-m);
+    }
+
     .header[data-js] .header__toggle {
       display: block;
     }
@@ -266,9 +219,9 @@ const links = [
       display: none;
       position: absolute;
       inset: 100% 0 auto;
-      height: calc(100svh - 3.5rem);
-      padding: var(--space-l) var(--gutter);
-      background: var(--night-950);
+      padding: var(--space-m) var(--gutter) var(--space-l);
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--black) 95%, transparent);
     }
 
     .header[data-js][data-open] .header__nav {
@@ -277,17 +230,16 @@ const links = [
 
     .header[data-js] .header__nav ul {
       flex-direction: column;
-      gap: var(--space-m);
+      gap: 0;
     }
 
     .header[data-js] .header__nav a {
-      font-family: var(--font-display);
-      font-size: var(--step-2);
-      text-transform: uppercase;
-      color: var(--moon-100);
+      display: block;
+      padding-block: 0.75rem;
+      font-size: var(--text-base);
     }
 
-    /* Without JS: hide the inline nav to avoid overflow; the footer and the anchors still work. */
+    /* Without JS: hide the inline nav to avoid overflow; the anchors and the footer still work. */
     .header:not([data-js]) .header__nav {
       display: none;
     }
