@@ -26,7 +26,14 @@ const startSpotify = spotifyUrl(start.ownTracks?.[0]?.spotify ?? start.spotify);
 const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact : HEIGHT.album;
 ---
 
-<div class="sp" data-spotify-player data-spotify={startSpotify ?? undefined} data-compact={HEIGHT.compact} data-album={HEIGHT.album}>
+<div
+  class="sp"
+  data-spotify-player
+  data-spotify={startSpotify ?? undefined}
+  data-compact={HEIGHT.compact}
+  data-album={HEIGHT.album}
+  data-frame-title={t.music.listenOnSpotify}
+>
   <a class="sp__buy mono" href={start.beatport ?? undefined} target="_blank" rel="noopener" hidden={!start.beatport} data-buy>
     {t.music.buyOnBeatport} <span aria-hidden="true">↗</span>
   </a>
@@ -76,6 +83,7 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
     const ownTracks = box.querySelector<HTMLElement>('[data-own-tracks]')!;
     const compact = Number(box.dataset.compact);
     const album = Number(box.dataset.album);
+    const frameTitle = box.dataset.frameTitle ?? '';
 
     let spotify = box.dataset.spotify ?? '';
     let state: 'idle' | 'loading' | 'ready' | 'failed' = 'idle';
@@ -107,6 +115,8 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
         api.createController(mount, { url: withTheme(spotify), width: '100%', height: '100%' }, (c) => {
           controller = c;
           state = 'ready';
+          // Spotify's iframe comes without a title: screen readers need one to name it
+          frame.querySelector('iframe')?.setAttribute('title', frameTitle);
           clearTimeout(timer);
           fallback.hidden = true;
           facade.hidden = true;

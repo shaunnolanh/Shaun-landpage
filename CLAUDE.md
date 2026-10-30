@@ -14,7 +14,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 - `src/pages/index.astro` y `src/pages/es/index.astro` renderizan `src/components/HomePage.astro` y solo le pasan el prop `lang`.
 - Orden: Header · Hero · About · Music · Radio Silence (`Sets`) · Redes (`Socials`) · Contacto (`Contact`) · Footer, más `BookingDialog` (el formulario de booking, una sola vez en el HTML).
 - Cada sección recibe `lang` y llama a `useTranslations(lang)` (`src/i18n/utils.ts`). El ruteo usa el i18n nativo de Astro (`prefixDefaultLocale: false`). `Base.astro` emite el canonical y los `hreflang`, y tiene un slot `head` para precargas de la página (la foto del hero).
-- JS mínimo, en un `<script>` inline chico dentro de cada componente: header (fondo al scrollear, menú mobile), diálogo de booking, carga de embeds, envío de formularios y email ofuscado.
+- JS mínimo, en un `<script>` inline chico dentro de cada componente: header (fondo al scrollear, menú mobile), diálogo de booking, reproductor de Spotify, envío de formularios y email ofuscado.
 - Al recargar o volver con atrás/adelante, la página arranca arriba (script `is:inline` al principio del `<head>` en `Base.astro`). Un link nuevo con `#sección` se respeta y la bfcache no se toca.
 
 ## Convenciones
@@ -65,12 +65,12 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Embeds, formularios y email
 
-- **Embeds** (`Embed.astro`): son fachadas que cargan al hacer clic (play blanco). El iframe de Beatport, SoundCloud, Spotify o Mixcloud se crea recién en el clic, así que el HTML inicial tiene que tener cero iframes.
-  - SoundCloud se normaliza al modo `visual` (oscuro) con el acento leído de `--white` en `tokens.css`.
+- **Embeds** (`Embed.astro`): **cargan con la página, sin clic** (pedido de Shaun, 2026-10-29): el `<iframe>` de Beatport, SoundCloud, Spotify o Mixcloud va directo en el HTML. Costo: ~2,2 MB más y cookies de terceros desde la carga (Lighthouse "Best practices" ~79). La fachada con botón queda solo en modo `controlled` (el reproductor de Spotify, mientras carga).
+  - SoundCloud: un **widget pegado** (`<iframe>` o `src` de `w.soundcloud.com/player`) se usa **tal cual**, con sus parámetros y su `height` (Radio Silence: el clásico de 166 px). Un link de página (`soundcloud.com/…`) se convierte al modo `visual` (oscuro, 300 px) con el acento leído de `--white` en `tokens.css`.
   - Beatport bloquea el acceso automático: los datos los pega el equipo (código Embed o lista de tracks); no intentar leer beatport.com.
   - En `src/data/music.ts` se pega en `link` el link normal del track/set (en Beatport, la página del track o su código Embed) (Compartir → Copiar link), el `src` del iframe o el `<iframe>` completo. `toEmbed` (`src/data/embed.ts`) detecta la plataforma, arma la URL del reproductor y su altura.
   - Links cortos (`on.soundcloud.com`, `spotify.link`) o desconocidos frenan el build con un mensaje: hay que pegar la URL larga.
-- **Sets de Radio Silence** (`Sets.astro`, `sets` en `src/data/music.ts`): cada set es un `Embed` (`link` + `title`), sin fecha ni lugar, en un recuadro (borde al 20 %, fondo negro al 40 %, `--radius-2xl`), SoundCloud en modo visual de 300 px. Para sumar otro, agregar un objeto a `sets`.
+- **Sets de Radio Silence** (`Sets.astro`, `sets` en `src/data/music.ts`): cada set es un `Embed` (`link` + `title`), sin fecha ni lugar, en un recuadro (borde al 20 %, fondo negro al 40 %, `--radius-2xl`). Hoy, el widget clásico de SoundCloud de 166 px, pegado tal cual. Para sumar otro, agregar un objeto a `sets`.
 - **Redes** (`Socials.astro`): fila centrada de íconos redondos (SVG inline) con las redes de `socials` en `site.ts` que tengan link y un ícono definido. Para sumar una red, completar su `url` (y su ícono, si no está).
 - **Contacto** (`Contact.astro`): tarjeta destacada de booking (email grande, press kit, "Request a date") y, debajo, el formulario de Collabs en una `.card`.
 - **Formularios** (`ContactForm.astro`, `variant: 'booking' | 'collab'`): envían por POST a Web3Forms.
@@ -83,7 +83,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 - **Carrusel** (`TrackCarousel.astro`): coverflow nativo, sin dependencias. `scroll-snap` para el swipe, el giro 3D con `animation-timeline: view(inline)` dentro de `@supports` (longhands), reflejo con `-webkit-box-reflect`. Un script chico convierte cada portada en botón "Seleccionar …", maneja flechas/teclado y emite `track:change`. Sin JS: fila de links a Spotify. Reduced motion: sin 3D.
   - El script centra con `slide.offsetLeft`: `.cf__track` tiene `position: relative` para ser el `offsetParent` de las portadas. Sin eso, el carrusel arranca en otra portada en desktop.
-- **Reproductor** (`SpotifyPlayer.astro`): Spotify iFrame API, cargada recién en la primera interacción. Cambiar de portada → `loadEntity(url?theme=0)` (álbum o tema); `loadEntity` corta la reproducción, así que si estaba sonando se llama `play()` en el siguiente `ready`. La fachada es `Embed.astro` en modo `controlled`. El reproductor de Spotify queda visible (términos de Spotify); si la API falla o tarda 8 s, link "Escuchar en Spotify".
+- **Reproductor** (`SpotifyPlayer.astro`): Spotify iFrame API, cargada con la página (sin reproducir solo; un clic en la fachada mientras carga = reproducir). Al iframe de Spotify se le pone `title` (viene sin él). Cambiar de portada → `loadEntity(url?theme=0)` (álbum o tema); `loadEntity` corta la reproducción, así que si estaba sonando se llama `play()` en el siguiente `ready`. La fachada es `Embed.astro` en modo `controlled`. El reproductor de Spotify queda visible (términos de Spotify); si la API falla o tarda 8 s, link "Escuchar en Spotify".
 - **Sin app de Spotify:** la Web API exige que el dueño tenga Premium. Se usa **oEmbed** (público): `npm run spotify:sync` baja título y portada (640 px, por un prefijo no documentado del CDN; si falla, 300 px) a `src/assets/covers/` y escribe `src/data/spotify-tracks.json` (commiteado). En Vercel corre en `prebuild` y nunca frena el deploy; en local es manual.
 - **Una portada por lanzamiento** (single, EP o álbum): `carouselReleases` en `src/data/music.ts`. Debajo de la portada van título, artistas y una línea `EP · Dublucid · 2026`. `selfReleased: true` = sin sello (no se muestra sello ni marcador). EP/álbum → embed de álbum de 352 px (con la lista de temas); single → embed compacto de 152 px; el alto se reserva en `.sp__stage` y cambia con una transición.
   - Lanzamientos compartidos con otros artistas (p. ej. *Three of a Kind #033*, compilado del sello): `ownTracks` con los temas de Shaun. El reproductor toca solo esos, uno por uno (embed compacto + botones para elegir el tema).

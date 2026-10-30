@@ -15,6 +15,7 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 - **Textos en TS** (paridad EN/ES por tipos). **`null` = no confirmado**; JSON-LD solo con datos confirmados.
 - **v2 monocroma:** negro, `#0a0a0a` y blanco con opacidad; sin degradados de color (el violeta-naranja de la referencia se descartó). El `©` al 55 % porque el 40 % de la referencia no pasa AA.
 - **Hero:** nombre y botón abajo para no tapar la cara. La foto es el LCP: `src/lib/hero-image.ts` arma el `<picture>` y la precarga con los mismos archivos. `site.heroVideo` listo para un video (Higgsfield).
+- **Reproductores cargados de entrada** (pedido de Shaun, 2026-10-29): Spotify (iFrame API al cargar) y SoundCloud (iframe en el HTML), sin fachada. Costo medido: la página pasa de ~0,2 MB a ~2,4 MB y Best practices a ~79 (cookies de terceros); rendimiento sigue 96–100. El widget de SoundCloud pegado se respeta tal cual (166 px).
 - **Booking en `<dialog>` nativo**, una sola vez en el HTML; sin JS, los botones van a `#contact` (email).
 - **About:** solo `about.long` (el `short` repite su comienzo). Dos columnas desde 64rem; en tablet la columna de la bio quedaba muy angosta.
 - **Menú:** hamburguesa hasta 64rem (a 768 no entran cuatro links + EN/ES).
