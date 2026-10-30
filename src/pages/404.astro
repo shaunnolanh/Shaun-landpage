@@ -10,9 +10,6 @@ const es = useTranslations('es');
 
 <Base lang="en" title={`${en.notFound.title} — Shaun Nolanh`} noindex>
   <main id="main" class="not-found container">
-    <!-- The end of the story: the cigarette, out, on the floor. No orange light on this page. -->
-    <img class="not-found__scene" src="/media/footer/last.webp" width="704" height="400" alt="" />
-
     <section class="not-found__block" lang="en">
       <h1 class="not-found__title">{en.notFound.title}</h1>
       <p>{en.notFound.text}</p>
@@ -32,37 +29,30 @@ const es = useTranslations('es');
     display: grid;
     gap: var(--space-l);
     align-content: center;
-    justify-items: start;
+    justify-items: center;
     min-height: 100svh;
     padding-block: var(--space-xl);
-  }
-
-  .not-found__scene {
-    width: min(100%, 520px);
-    height: auto;
-    /* The frame background is slightly darker than the page: lighten makes it disappear */
-    mix-blend-mode: lighten;
-    mask-image: linear-gradient(to bottom, transparent, black 35%), linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    mask-composite: intersect;
+    text-align: center;
   }
 
   .not-found__block {
     display: grid;
     gap: var(--space-s);
-    justify-items: start;
+    justify-items: center;
   }
 
   .not-found__block + .not-found__block {
     padding-top: var(--space-l);
-    border-top: 1px solid var(--blue-600);
+    border-top: 1px solid var(--line);
   }
 
   .not-found__title {
-    font-size: var(--step-3);
+    font-size: var(--text-3xl);
+    letter-spacing: var(--tracking-tight);
     text-transform: uppercase;
   }
 
   p {
-    color: var(--fog-300);
+    color: var(--text-70);
   }
 </style>
