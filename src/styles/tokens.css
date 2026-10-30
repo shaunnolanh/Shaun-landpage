@@ -1,51 +1,69 @@
 /*
- * Design tokens — "light in the dark".
- * The palette is closed: don't add colors here without discussing it first.
+ * Design tokens — v2, monochrome (from the reference's Tailwind values).
+ * The palette is closed: black, neutral-950 and white. Every grey is white at an opacity,
+ * made with color-mix() from these tokens. No other colors, no color gradients.
  */
 :root {
-  /* Night (backgrounds and surfaces) */
-  --night-950: #070d18;
-  --night-900: #0c1a2e;
-  --night-800: #132b4a;
+  /* Colors */
+  --black: #000;
+  --neutral-950: #0a0a0a;
+  --white: #fff;
 
-  /* Blues (structure and atmosphere) */
-  --blue-600: #1e4f8c;
-  --blue-400: #2f7db8;
-  --dusk-500: #3b3960;
+  /* Text (white at an opacity; all pass WCAG AA on black and neutral-950) */
+  --text: var(--white);
+  --text-80: color-mix(in srgb, var(--white) 80%, transparent);
+  --text-70: color-mix(in srgb, var(--white) 70%, transparent); /* paragraphs */
+  --text-60: color-mix(in srgb, var(--white) 60%, transparent); /* subtitles, labels */
+  --text-55: color-mix(in srgb, var(--white) 55%, transparent); /* smallest print (40% fails AA) */
 
-  /* Light (scarce: max ~10% of each screen, one source per section) */
-  --glow-500: #ff5b1f;
-  --glow-400: #ff8a3d;
-  --ember-600: #d9402a;
-
-  /* Text */
-  --moon-100: #f3e8cf;
-  --fog-300: #9db3cc;
+  /* Lines and fills */
+  --line: color-mix(in srgb, var(--white) 10%, transparent);
+  --line-strong: color-mix(in srgb, var(--white) 20%, transparent);
+  --line-hover: color-mix(in srgb, var(--white) 30%, transparent);
+  --fill: color-mix(in srgb, var(--white) 10%, transparent);
+  --fill-hover: color-mix(in srgb, var(--white) 20%, transparent);
 
   /* Typography */
-  --font-display: 'Unbounded Variable', 'Arial Black', sans-serif;
-  --font-body: 'Manrope Variable', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --font: 'Montserrat Variable', system-ui, sans-serif;
 
-  /* Fluid type scale: min at 375px, max at ~1440px */
-  --step--1: clamp(0.8rem, 0.77rem + 0.15vw, 0.875rem);
-  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --step-1: clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
-  --step-2: clamp(1.5rem, 1.2rem + 1.3vw, 2.25rem);
-  --step-3: clamp(2rem, 1.3rem + 3vw, 4rem);
-  --step-hero: clamp(3rem, 16vw, 11rem);
+  /* Type scale: Tailwind's sizes (rem) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  /* Hero name: text-6xl (3.75rem) on mobile → text-9xl (8rem) on desktop */
+  --text-hero: clamp(3.75rem, 1.5rem + 9vw, 8rem);
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-wide: 0.1em;
+  --tracking-widest: 0.2em;
 
   /* Spacing */
   --space-xs: 0.5rem;
   --space-s: 1rem;
   --space-m: 1.5rem;
-  --space-l: clamp(2rem, 1.5rem + 2vw, 3rem);
-  --space-xl: clamp(4rem, 3rem + 5vw, 8rem);
-  --gutter: clamp(1rem, 0.5rem + 3vw, 3rem);
-  --max-width: 72rem;
+  --space-l: 3rem;
+  --space-xl: 4rem;
+  --section-y: 5rem; /* py-20; 8rem (py-32) from 48rem, in global.css */
+  --gutter: 1.5rem; /* px-6 */
 
-  /* Misc */
-  --radius: 0.375rem;
+  /* Containers */
+  --container-7xl: 80rem; /* header */
+  --container-6xl: 72rem; /* gallery (not used yet) */
+  --container-5xl: 64rem; /* About */
+  --container-4xl: 56rem; /* Music, Radio Silence, contact */
+
+  /* Shapes */
+  --radius: 0.625rem; /* cards */
+  --radius-2xl: 1rem; /* featured card, dialog */
   --radius-pill: 999px;
-  --ease-slow: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Motion */
+  --duration: 300ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }

@@ -22,9 +22,3 @@ export function reveal(selector: string) {
     observer.observe(el);
   });
 }
-
-/** Same, but only where CSS scroll-driven animations aren't supported (Firefox today). */
-export function revealFallback(selector: string) {
-  if (CSS.supports('animation-timeline: view()')) return;
-  reveal(selector);
-}

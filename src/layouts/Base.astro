@@ -1,10 +1,8 @@
 ---
-import '@fontsource-variable/unbounded/wght.css';
-import '@fontsource-variable/manrope/wght.css';
-import '@fontsource-variable/jetbrains-mono/wght.css';
+import '@fontsource-variable/montserrat/wght.css';
 import '../styles/global.css';
-// Preload only the display font's latin subset: it's what the hero needs first.
-import unboundedLatin from '@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url';
+// Preload only the latin subset: it's what the hero name needs first.
+import montserratLatin from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import { languages, useTranslations, type Lang } from '../i18n/utils';
 import { site as siteData, socials } from '../data/site';
@@ -50,8 +48,7 @@ const jsonLd = JSON.stringify(structuredData).replace(/</g, '\\u003c');
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!--
-      The page tells a story top to bottom (the hand drops the cigarette in Music, it lands in the footer),
-      so a reload or back/forward starts at the top instead of mid-story. Inline and first in <head>:
+      A reload or back/forward starts at the top (the hero), instead of mid-page. Inline and first in <head>:
       it has to run before the browser restores the old scroll position. A fresh link to /#section is
       a normal navigation and still lands on its section; pages restored from the bfcache don't rerun this.
     -->
@@ -68,10 +65,12 @@ const jsonLd = JSON.stringify(structuredData).replace(/</g, '\\u003c');
     </script>
     <title>{title ?? t.meta.title}</title>
     <meta name="description" content={t.meta.description} />
-    <meta name="theme-color" content="#070D18" />
+    <meta name="theme-color" content="#0a0a0a" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preload" href={unboundedLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={montserratLatin} as="font" type="font/woff2" crossorigin />
+    <!-- Page-specific preloads (the hero photo, its LCP) -->
+    <slot name="head" />
 
     {
       noindex ? (
@@ -106,8 +105,8 @@ const jsonLd = JSON.stringify(structuredData).replace(/</g, '\\u003c');
     <a class="skip-link" href="#main">{t.skipLink}</a>
     <slot />
     <script>
-      import { revealFallback } from '../scripts/reveal';
-      revealFallback('.section__title');
+      import { reveal } from '../scripts/reveal';
+      reveal('.reveal');
     </script>
   </body>
 </html>
