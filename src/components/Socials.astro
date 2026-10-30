@@ -1,0 +1,92 @@
+---
+// A centered row of round icons: only the networks in src/data/site.ts that have a link.
+import { socials } from '../data/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Simple line icons (24×24, stroke = currentColor). Networks without an icon here are skipped.
+const icons: Record<string, string> = {
+  SoundCloud:
+    '<path d="M7 17h10.5a3.5 3.5 0 0 0 .6-6.95A5.5 5.5 0 0 0 7.6 9" /><path d="M2.5 13v4M5 11v6M7.5 9v8" />',
+  Instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.25" cy="6.75" r="0.75" fill="currentColor" />',
+  Beatport: '<circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="3" /><path d="M12 3.5v5.5" />',
+  Spotify: '<circle cx="12" cy="12" r="8.5" /><path d="M7.5 9.5c3-1 6.5-.7 9 .8M8 12.6c2.5-.7 5.2-.4 7.3.8M8.6 15.4c1.9-.5 3.8-.3 5.4.6" />',
+};
+const links = socials.flatMap((s) => (s.url && icons[s.name] ? [{ name: s.name, url: s.url, icon: icons[s.name] }] : []));
+---
+
+{
+  links.length > 0 && (
+    <section class="section socials" aria-label={t.footer.social}>
+      <ul class="socials__list container reveal">
+        {links.map((link) => (
+          <li>
+            <a class="social" href={link.url} target="_blank" rel="me noopener" aria-label={link.name}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={link.icon} />
+              <span class="social__name" aria-hidden="true">{link.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .socials__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-m) var(--space-l);
+    padding-block: 0 var(--space-m);
+    list-style: none;
+  }
+
+  .social {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--fill);
+    color: var(--text);
+    transition:
+      transform var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
+  }
+
+  .social:hover,
+  .social:focus-visible {
+    transform: scale(1.1);
+    background: var(--fill-hover);
+  }
+
+  /* Tooltip: the network's name under the icon, on hover and keyboard focus */
+  .social__name {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--text-70);
+    opacity: 0;
+    transform: translateX(-50%);
+    transition: opacity var(--duration) var(--ease);
+    pointer-events: none;
+  }
+
+  .social:hover .social__name,
+  .social:focus-visible .social__name {
+    opacity: 1;
+  }
+</style>
