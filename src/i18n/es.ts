@@ -54,7 +54,6 @@ export const es: Dictionary = {
   },
   sets: {
     title: 'Radio Silence',
-    kicker: 'Serie de DJ sets',
     lead: 'Cuando se corta la señal, otra cosa empieza a hablar. Un descenso lento hacia lo profundo, sin apuro, sin ruido.',
   },
   about: {

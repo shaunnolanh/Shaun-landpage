@@ -9,40 +9,19 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-
-// Oscilloscope-like signal, computed at build time. Every component repeats exactly every 1200 units,
-// so two copies side by side loop without a seam while the wave drifts.
-const WIDTH = 1200;
-const MID = 16;
-const wave = (x: number) => {
-  const a = (2 * Math.PI * x) / WIDTH;
-  return MID + 9 * Math.sin(6 * a) * (0.6 + 0.4 * Math.sin(2 * a)) + 2.5 * Math.sin(23 * a);
-};
-const points: string[] = [];
-for (let x = 0; x <= WIDTH * 2; x += 4) points.push(`${x},${wave(x).toFixed(2)}`);
-const signalPath = `M${points.join(' L')}`;
 ---
 
 <section class="section section--alt" id="sets" aria-labelledby="sets-title">
-  <div class="container">
-    <header class="section__head sets__head">
-      <!-- Radio Silence, literally: a live signal that flattens into silence as you scroll the section. -->
-      <svg class="signal" viewBox={`0 0 ${WIDTH} ${MID * 2}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <g class="signal__amp">
-          <g class="signal__drift">
-            <path d={signalPath} />
-          </g>
-        </g>
-      </svg>
-      <p class="pill">{t.sets.kicker}</p>
+  <div class="container container--4xl">
+    <header class="reveal">
       <h2 class="section__title" id="sets-title">{t.sets.title}</h2>
       <p class="section__lead">{t.sets.lead}</p>
     </header>
-
+    <!-- One set per row, full width (SoundCloud's visual player, 300px tall), each in its own frame -->
     <ol class="sets">
       {
-        sets.map((set, i) => (
-          <li class="set">
+        sets.map((set) => (
+          <li class="set reveal">
             <Embed embed={set} lang={lang} />
           </li>
         ))
@@ -51,107 +30,7 @@ const signalPath = `M${points.join(' L')}`;
   </div>
 </section>
 
-<script>
-  // Fallback for browsers without scroll-driven animations (Firefox): flatten once the sets are in view.
-  const signal = document.querySelector<SVGElement>('.signal');
-  const list = document.querySelector('.sets');
-  if (signal && list && !CSS.supports('animation-timeline: view()') && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        signal.classList.add('is-silent');
-        observer.disconnect();
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(list);
-  }
-</script>
-
 <style>
-  /* The section is the scroll timeline that flattens the signal */
-  #sets {
-    view-timeline-name: --sets;
-  }
-
-  .sets__head {
-    position: relative;
-  }
-
-  /* Sits in the section's top padding: no extra height, layout unchanged */
-  .signal {
-    position: absolute;
-    top: calc(var(--space-xl) * -0.5 - 16px);
-    left: 0;
-    width: 100%;
-    height: 32px;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .signal path {
-    fill: none;
-    stroke: var(--blue-400);
-    stroke-width: 1px;
-    stroke-opacity: 0.8;
-    /* Keeps the line 1px thick while the group is squashed (otherwise the flat line would vanish) */
-    vector-effect: non-scaling-stroke;
-  }
-
-  .signal__amp,
-  .signal__drift {
-    transform-box: view-box;
-    transform-origin: 0 50%;
-  }
-
-  /* A living signal: slow horizontal drift (one full period every 40s) */
-  .signal__drift {
-    animation: signal-drift 40s linear infinite;
-  }
-
-  @keyframes signal-drift {
-    to {
-      transform: translateX(-1200px);
-    }
-  }
-
-  /* Amplitude goes to silence as the section is scrolled */
-  @supports (animation-timeline: view()) {
-    .signal__amp {
-      /* Longhands on purpose: the CSS minifier would merge `animation` + `animation-timeline` into one
-         shorthand, which browsers reject. linear: the scroll already sets the pace, so it fades evenly. */
-      animation-name: signal-flatten;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --sets;
-      animation-range: cover 20% cover 70%;
-    }
-  }
-
-  @keyframes signal-flatten {
-    to {
-      transform: scaleY(0.02);
-    }
-  }
-
-  /* Fallback (no scroll-driven animations) */
-  .signal.is-silent .signal__amp {
-    transform: scaleY(0.02);
-    transition: transform 3s var(--ease-slow);
-  }
-
-  /* Reduced motion: a flat, still line (silence) */
-  @media (prefers-reduced-motion: reduce) {
-    .signal__drift,
-    .signal__amp {
-      animation: none;
-    }
-
-    .signal__amp {
-      transform: scaleY(0.02);
-    }
-  }
-
   .sets {
     display: grid;
     gap: var(--space-l);
@@ -159,5 +38,10 @@ const signalPath = `M${points.join(' L')}`;
     list-style: none;
   }
 
-  /* One set per row, full width of the container (SoundCloud's visual player, 300px tall) */
+  .set {
+    padding: var(--space-s);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, var(--black) 40%, transparent);
+  }
 </style>
