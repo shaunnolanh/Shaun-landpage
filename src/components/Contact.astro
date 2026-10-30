@@ -1,0 +1,165 @@
+---
+// Contact: the featured booking card (email + "Request a date", which opens the booking dialog)
+// and, under it, the collab form in a secondary card.
+import ContactForm from './ContactForm.astro';
+import ObfuscatedEmail from './ObfuscatedEmail.astro';
+import { site } from '../data/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="section section--alt" id="contact" aria-labelledby="contact-title">
+  <div class="container container--4xl contact">
+    <h2 class="section__title reveal" id="contact-title">{t.contact.title}</h2>
+
+    <div class="booking-card reveal">
+      <span class="booking-card__icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.5" y="5.5" width="17" height="13" rx="2" /><path d="M4 7l8 6 8-6" />
+        </svg>
+      </span>
+      <h3 class="booking-card__label">{t.contact.bookingLabel}</h3>
+      <p class="booking-card__lead">{t.booking.lead}</p>
+      <p class="booking-card__email">
+        <ObfuscatedEmail email={site.bookingEmail} subject={t.booking.emailSubject} />
+      </p>
+      <div class="booking-card__actions">
+        <!-- Opens the booking dialog (BookingDialog); without JS the email above is the way -->
+        <a class="btn" href="#contact" data-open-booking>{t.contact.requestDate}</a>
+        {
+          site.pressKitUrl ? (
+            <a class="btn" href={site.pressKitUrl} download>
+              {t.booking.pressKit} <span aria-hidden="true">↓</span>
+            </a>
+          ) : (
+            <span class="booking-card__kit">
+              <button class="btn" type="button" disabled>{t.booking.pressKitPending}</button>
+              <span class="pending">[PDF PENDIENTE]</span>
+            </span>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="collab-card card reveal">
+      <h3 class="collab-card__title">{t.collabs.title}</h3>
+      <p class="collab-card__lead">{t.collabs.lead}</p>
+      <ContactForm lang={lang} variant="collab" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  .contact .section__title {
+    margin-bottom: var(--space-s);
+  }
+
+  /* Featured card: black, 20% border, rounded-2xl, big padding, everything centered */
+  .booking-card {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+    padding: var(--space-l) var(--space-m);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-2xl);
+    background: var(--black);
+    text-align: center;
+  }
+
+  @media (min-width: 48rem) {
+    .booking-card {
+      padding: var(--space-xl) var(--space-l);
+    }
+  }
+
+  .booking-card__icon {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: var(--space-xs);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--fill);
+  }
+
+  .booking-card__label {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+  }
+
+  .booking-card__lead {
+    max-width: 32rem;
+    color: var(--text-60);
+  }
+
+  .booking-card__email {
+    margin-top: var(--space-xs);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 48rem) {
+    .booking-card__email {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  .booking-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-s);
+    margin-top: var(--space-m);
+  }
+
+  .booking-card__kit {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  /* Secondary card: 10% border, radius, the collab form */
+  .collab-card {
+    display: grid;
+    gap: var(--space-s);
+    padding: var(--space-l) var(--space-m);
+  }
+
+  @media (min-width: 48rem) {
+    .collab-card {
+      padding: var(--space-l);
+    }
+  }
+
+  .collab-card__title {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-widest);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .collab-card__lead {
+    max-width: 36rem;
+    margin: 0 auto var(--space-m);
+    color: var(--text-60);
+    text-align: center;
+  }
+</style>

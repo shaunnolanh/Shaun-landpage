@@ -1,6 +1,5 @@
 ---
 import LangSwitch from './LangSwitch.astro';
-import { socials } from '../data/site';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -14,79 +13,36 @@ const year = new Date().getFullYear();
 
 <footer class="footer">
   <div class="container footer__inner">
-    <nav aria-label={t.footer.social}>
-      <ul class="footer__social">
-        {
-          socials.map((s) => (
-            <li>
-              {s.url ? (
-                <a href={s.url} rel="me noopener" target="_blank">{s.name}</a>
-              ) : (
-                <span>
-                  {s.name} <span class="pending">[LINK PENDIENTE]</span>
-                </span>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <div class="footer__bottom">
-      <LangSwitch lang={lang} />
-      <p class="mono">© {year} Shaun Nolanh. {t.footer.rights}</p>
-      <p class="mono">{t.footer.credits}</p>
-    </div>
+    <p class="footer__name">Shaun Nolanh</p>
+    <p class="footer__rights">© {year} · {t.footer.rights}</p>
+    <LangSwitch lang={lang} />
   </div>
 </footer>
 
 <style>
   .footer {
-    position: relative;
-    isolation: isolate;
-    overflow: clip;
-    padding-block: var(--space-xl) var(--space-l);
-    border-top: 1px solid var(--blue-600);
+    padding-block: var(--space-xl);
+    border-top: 1px solid var(--line);
+    background: var(--black);
   }
 
   .footer__inner {
     display: grid;
-    gap: var(--space-l);
+    justify-items: center;
+    gap: var(--space-s);
+    text-align: center;
   }
 
-  .footer__social {
-    display: grid;
-    gap: var(--space-s) var(--space-l);
-    padding: 0;
-    list-style: none;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    letter-spacing: 0.06em;
+  .footer__name {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-widest);
     text-transform: uppercase;
   }
 
-  .footer__social a {
-    display: inline-block;
-    padding-block: 0.5rem;
-    text-decoration: none;
-  }
-
-  .footer__social a:hover {
-    color: var(--glow-400);
-  }
-
-  .footer__bottom {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-s) var(--space-l);
-    align-items: center;
-    color: var(--fog-300);
-  }
-
-  @media (min-width: 48rem) {
-    .footer__social {
-      grid-template-columns: repeat(3, auto);
-      justify-content: start;
-    }
+  /* White at 55%, not the reference's 40%: 40% fails WCAG AA on black */
+  .footer__rights {
+    font-size: var(--text-sm);
+    color: var(--text-55);
   }
 </style>

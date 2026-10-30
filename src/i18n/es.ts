@@ -73,8 +73,12 @@ export const es: Dictionary = {
     lead: 'Para clubes, festivales y showcases. Bajate el press kit o mandame los datos de tu evento.',
     pressKit: 'Descargar press kit',
     pressKitPending: 'Press kit',
-    emailLabel: 'O escribime directo:',
     emailSubject: 'Booking — Shaun Nolanh',
+  },
+  contact: {
+    title: 'Contacto',
+    bookingLabel: 'Bookings & Info',
+    requestDate: 'Pedir fecha',
   },
   collabs: {
     title: 'Collabs',
@@ -105,6 +109,5 @@ export const es: Dictionary = {
   footer: {
     social: 'Redes',
     rights: 'Todos los derechos reservados.',
-    credits: 'Sitio: [CRÉDITOS PENDIENTES]',
   },
 };

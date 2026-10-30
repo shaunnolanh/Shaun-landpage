@@ -73,8 +73,12 @@ export const en = {
     lead: 'For club dates, festivals and showcases. Download the press kit or send the details of your event.',
     pressKit: 'Download press kit',
     pressKitPending: 'Press kit',
-    emailLabel: 'Or write directly:',
     emailSubject: 'Booking — Shaun Nolanh',
+  },
+  contact: {
+    title: 'Contact',
+    bookingLabel: 'Bookings & Info',
+    requestDate: 'Request a date',
   },
   collabs: {
     title: 'Collabs',
@@ -105,7 +109,6 @@ export const en = {
   footer: {
     social: 'Social',
     rights: 'All rights reserved.',
-    credits: 'Site: [CRÉDITOS PENDIENTES]',
   },
 };
 
