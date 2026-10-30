@@ -21,6 +21,11 @@ export const es: Dictionary = {
   },
   hero: {
     tagline: 'Progressive House · Deep House · Organic House',
+    book: 'Contratar',
+    photoAlt: 'Shaun Nolanh mirando hacia arriba, en blanco y negro.',
+  },
+  dialog: {
+    close: 'Cerrar',
   },
   music: {
     title: 'Música',

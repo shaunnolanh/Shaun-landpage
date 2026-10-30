@@ -1,0 +1,120 @@
+---
+// The booking form, once in the whole page, inside a native <dialog>. Any `[data-open-booking]` link
+// opens it (hero "Book now", "Request a date" in Contact). Without JS those links go to #contact,
+// where the booking email is.
+import ContactForm from './ContactForm.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<dialog class="booking-dialog" aria-labelledby="booking-dialog-title" data-booking-dialog>
+  <!-- The panel fills the dialog: a click outside it lands on the dialog itself (the backdrop) and closes -->
+  <div class="booking-dialog__panel">
+    <div class="booking-dialog__head">
+      <h2 class="booking-dialog__title" id="booking-dialog-title">{t.booking.title}</h2>
+      <button class="booking-dialog__close" type="button" aria-label={t.dialog.close} data-close-booking>
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <ContactForm lang={lang} variant="booking" />
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-booking-dialog]');
+
+  if (dialog && typeof dialog.showModal === 'function') {
+    let opener: HTMLElement | null = null;
+
+    document.querySelectorAll<HTMLElement>('[data-open-booking]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        opener = link;
+        dialog.showModal();
+        // Focus the first field, not the close button
+        dialog.querySelector<HTMLElement>('.form__field input, .form__field textarea')?.focus();
+      });
+    });
+
+    dialog.querySelector('[data-close-booking]')?.addEventListener('click', () => dialog.close());
+    // Click on the backdrop (outside the panel)
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    // Esc is native; on any close, focus goes back to the link that opened it
+    dialog.addEventListener('close', () => opener?.focus());
+  }
+</script>
+
+<style>
+  .booking-dialog {
+    width: min(100% - 2 * var(--gutter), 40rem);
+    max-height: calc(100svh - 2 * var(--gutter));
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-2xl);
+    background: var(--neutral-950);
+    color: var(--text);
+  }
+
+  .booking-dialog::backdrop {
+    background: color-mix(in srgb, var(--black) 70%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .booking-dialog__panel {
+    display: grid;
+    gap: var(--space-m);
+    padding: var(--space-l) var(--space-m);
+  }
+
+  @media (min-width: 48rem) {
+    .booking-dialog__panel {
+      padding: var(--space-l);
+    }
+  }
+
+  .booking-dialog__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+
+  .booking-dialog__title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    text-transform: uppercase;
+  }
+
+  .booking-dialog__close {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-70);
+    cursor: pointer;
+    transition:
+      border-color var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+
+  .booking-dialog__close:hover {
+    border-color: var(--line-hover);
+    color: var(--text);
+  }
+</style>

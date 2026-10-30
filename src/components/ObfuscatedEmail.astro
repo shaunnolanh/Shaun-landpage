@@ -14,7 +14,7 @@ const [user, domain] = email ? email.split('@') : [];
 
 {
   email ? (
-    <a class="email" href="#booking" data-u={reverse(user)} data-d={reverse(domain)} data-s={subject}>
+    <a class="email" href="#contact" data-u={reverse(user)} data-d={reverse(domain)} data-s={subject}>
       {user} [at] {domain.replace(/\./g, ' [dot] ')}
     </a>
   ) : (
@@ -34,12 +34,11 @@ const [user, domain] = email ? email.split('@') : [];
 
 <style>
   .email {
-    font-family: var(--font-mono);
-    text-underline-offset: 0.25em;
-    text-decoration-color: var(--blue-400);
+    text-decoration: none;
+    transition: color var(--duration) var(--ease);
   }
 
   .email:hover {
-    text-decoration-color: var(--moon-100);
+    color: var(--text-70);
   }
 </style>

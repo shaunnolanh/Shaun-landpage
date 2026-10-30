@@ -21,6 +21,11 @@ export const en = {
   },
   hero: {
     tagline: 'Progressive House · Deep House · Organic House',
+    book: 'Book now',
+    photoAlt: 'Shaun Nolanh looking up, in black and white.',
+  },
+  dialog: {
+    close: 'Close',
   },
   music: {
     title: 'Music',

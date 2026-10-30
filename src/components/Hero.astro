@@ -1,100 +1,142 @@
 ---
+import { site } from '../data/site';
+import type { HeroImage } from '../lib/hero-image';
+import { heroSizes } from '../lib/hero-image';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
+  /** Same files the page head preloads (see HomePage) */
+  image: HeroImage;
 }
 
-const { lang } = Astro.props;
+const { lang, image } = Astro.props;
 const t = useTranslations(lang);
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <div class="hero__fog" aria-hidden="true"></div>
-  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__media">
+    <picture>
+      <source type="image/avif" srcset={image.avif.srcSet.attribute} sizes={heroSizes} />
+      <source type="image/webp" srcset={image.webp.srcSet.attribute} sizes={heroSizes} />
+      <img
+        src={image.jpeg.src}
+        srcset={image.jpeg.srcSet.attribute}
+        sizes={heroSizes}
+        width={image.width}
+        height={image.height}
+        alt={t.hero.photoAlt}
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+    {
+      /* Optional background video over the photo; the photo stays as poster and as the reduced-motion view */
+      site.heroVideo && (
+        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster={image.jpeg.src} aria-hidden="true">
+          <source src={site.heroVideo} type="video/mp4" />
+        </video>
+      )
+    }
+  </div>
 
   <div class="hero__content container">
-    <h1 class="hero__title" id="hero-title">
-      <span>Shaun</span>
-      <span>Nolanh</span>
-    </h1>
-    <p class="hero__tagline mono">{t.hero.tagline}</p>
+    <h1 class="hero__title" id="hero-title">Shaun Nolanh</h1>
+    <p class="hero__tagline">{t.hero.tagline}</p>
+    <!-- With JS it opens the booking dialog (BookingDialog); without JS it goes to the booking email in Contact -->
+    <a class="btn btn--solid hero__cta" href="#contact" data-open-booking>{t.hero.book}</a>
   </div>
 </section>
 
 <style>
-  /* Just the name and the tagline: the hand scene (MusicScene, right after the hero) fills the space
-     below them and drops the cigarette into the Music carousel. */
+  /* Full screen; name, tagline and button in the lower part so they never cover the face */
   .hero {
     position: relative;
-    padding-block: var(--space-l);
+    display: grid;
+    align-content: end;
+    min-height: 100svh;
+    padding-block: 6rem clamp(4rem, 12svh, 8rem);
     overflow: hidden;
     isolation: isolate;
+    background: var(--black);
   }
 
-  /* Atmosphere: slow blue fog drifting like a long progressive breakdown */
-  .hero__fog {
+  .hero__media {
     position: absolute;
-    inset: -20%;
-    z-index: -2;
-    background:
-      radial-gradient(40% 35% at 25% 30%, color-mix(in srgb, var(--blue-400) 22%, transparent), transparent 70%),
-      radial-gradient(45% 40% at 80% 20%, color-mix(in srgb, var(--dusk-500) 45%, transparent), transparent 70%),
-      linear-gradient(180deg, var(--night-900), var(--night-950) 75%);
-    animation: drift 60s ease-in-out infinite alternate;
-  }
-
-  /* A cold, moonlit glow on the horizon: blue, so the cigarette's ember stays the hero's only orange light */
-  .hero__glow {
-    position: absolute;
-    inset: auto -10% -35% -10%;
-    height: 70%;
+    inset: 0;
     z-index: -1;
-    background: radial-gradient(50% 50% at 50% 100%, color-mix(in srgb, var(--blue-400) 22%, transparent), color-mix(in srgb, var(--dusk-500) 18%, transparent) 55%, transparent 75%);
-    pointer-events: none;
   }
 
-  @keyframes drift {
-    to {
-      transform: translate3d(6%, 4%, 0) scale(1.08);
+  .hero__media img,
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Mobile (portrait crop): keep the face, a bit right of center and in the upper third */
+    object-position: 55% 35%;
+  }
+
+  /* Black at 60% → 40% → solid at the bottom, so the name reads and the hero melts into the page */
+  .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--black) 60%, transparent),
+      color-mix(in srgb, var(--black) 40%, transparent) 45%,
+      var(--black)
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__video {
+      display: none;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .hero__media img,
+    .hero__video {
+      object-position: 50% 30%;
     }
   }
 
   .hero__content {
     display: grid;
+    justify-items: center;
     gap: var(--space-m);
-    justify-items: start;
+    text-align: center;
   }
 
   .hero__title {
-    display: grid;
-    font-size: var(--step-hero);
-    font-weight: 800;
-    line-height: 0.92;
-    letter-spacing: -0.02em;
+    font-size: var(--text-hero);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: var(--tracking-tighter);
     text-transform: uppercase;
-    transform-origin: left center;
-    transition: text-shadow 0.6s var(--ease-slow);
-    /* Comes out of the smoke once on load (keyframes in global.css). Never from opacity 0, so LCP isn't delayed. */
-    animation: smoke-focus 1.6s var(--ease-slow) both;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__title {
-      animation: none;
-    }
-  }
-
-  /* Chromatic aberration: only on the name, only on hover */
-  .hero__title:hover {
-    text-shadow:
-      -0.03em 0 color-mix(in srgb, var(--ember-600) 75%, transparent),
-      0.03em 0 color-mix(in srgb, var(--blue-400) 75%, transparent);
   }
 
   .hero__tagline {
-    font-size: var(--step--1);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: var(--tracking-widest);
     text-transform: uppercase;
-    color: var(--fog-300);
+    color: var(--text-80);
+  }
+
+  @media (min-width: 48rem) {
+    .hero__tagline {
+      font-size: var(--text-lg);
+    }
+  }
+
+  .hero__cta {
+    margin-top: var(--space-m);
+    min-width: 12rem;
+    min-height: 3.5rem;
+    font-size: var(--text-base);
   }
 </style>

@@ -6,6 +6,11 @@ export const site = {
   pressKitUrl: null as string | null,
   /** Booking email. It's never printed in the HTML as plain text (see ObfuscatedEmail). */
   bookingEmail: 'ShaunNolanh@gmail.com' as string | null,
+  /**
+   * Background video for the hero (e.g. '/media/hero/hero.mp4'), muted and looping, with the photo as
+   * poster. `null` = only the photo. With reduced motion the photo is always shown.
+   */
+  heroVideo: null as string | null,
 };
 
 export type SocialLink = { name: string; url: string | null };

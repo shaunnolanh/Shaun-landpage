@@ -5,16 +5,18 @@ import tokens from '../styles/tokens.css?raw';
 
 export type Provider = 'beatport' | 'soundcloud' | 'spotify' | 'mixcloud';
 
-// SoundCloud's accent color (play button, waveform) = the site's light. Read from the tokens,
+// SoundCloud's accent color (play button, waveform) = the site's white. Read from the tokens,
 // so the palette keeps a single source of truth and no hex lives outside tokens.css.
-const GLOW = tokens.match(/--glow-500:\s*(#[0-9a-fA-F]{6})/)?.[1];
-if (!GLOW) throw new Error('[embed] --glow-500 not found in src/styles/tokens.css');
+const WHITE = tokens.match(/--white:\s*#([0-9a-fA-F]{6}|[0-9a-fA-F]{3});/)?.[1];
+if (!WHITE) throw new Error('[embed] --white not found in src/styles/tokens.css');
+// SoundCloud wants the 6-digit form: #fff → #ffffff
+const ACCENT = `#${WHITE.length === 3 ? [...WHITE].map((c) => c + c).join('') : WHITE}`;
 
-/** Dark "visual" player (cover art as background) with the site's orange accent. */
+/** Dark "visual" player (cover art as background) with the site's white accent. */
 function soundcloudPlayer(trackUrl: string): Player {
   const params = new URLSearchParams({
     url: trackUrl,
-    color: GLOW!,
+    color: ACCENT,
     visual: 'true',
     hide_related: 'true',
     show_comments: 'false',

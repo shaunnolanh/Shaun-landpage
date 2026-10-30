@@ -6,9 +6,10 @@ import Hero from './Hero.astro';
 import Music from './Music.astro';
 import Sets from './Sets.astro';
 import About from './About.astro';
-import Booking from './Booking.astro';
 import Collabs from './Collabs.astro';
+import BookingDialog from './BookingDialog.astro';
 import Footer from './Footer.astro';
+import { getHeroImage, heroSizes } from '../lib/hero-image';
 import type { Lang } from '../i18n/utils';
 
 interface Props {
@@ -16,17 +17,28 @@ interface Props {
 }
 
 const { lang } = Astro.props;
+const heroImage = await getHeroImage();
 ---
 
 <Base lang={lang}>
+  <!-- The hero photo is the LCP: preload the same AVIF set the <picture> uses -->
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    type="image/avif"
+    imagesrcset={heroImage.avif.srcSet.attribute}
+    imagesizes={heroSizes}
+    fetchpriority="high"
+  />
   <Header lang={lang} />
   <main id="main">
-    <Hero lang={lang} />
+    <Hero lang={lang} image={heroImage} />
+    <About lang={lang} />
     <Music lang={lang} />
     <Sets lang={lang} />
-    <About lang={lang} />
-    <Booking lang={lang} />
     <Collabs lang={lang} />
   </main>
   <Footer lang={lang} />
+  <BookingDialog lang={lang} />
 </Base>
