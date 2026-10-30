@@ -62,7 +62,7 @@ export const en = {
     // Texts from the team (2026-10-28): short version and full bio.
     short:
       'Progressive house producer and DJ based in Argentina. A graduate Sound Engineer (La Metro, 2021), with releases on 3rd Avenue, BBop Music, Mustache Crew Records, and DUBLUCID. Supported by global scene leaders, currently working on new music and official remixes.',
-    more: 'Read full bio',
+    photoAlt: 'Portrait of Shaun Nolanh in front of a flowering vine, in black and white.',
     long: [
       'Shaun Nolanh is a progressive house producer and DJ based in La Falda, Córdoba, Argentina. Originally from the iconic tourist city of Villa Carlos Paz, he immersed himself in the electronic music scene from a young age, attending shows by artists like Nick Warren and Guy J, and trying to recreate at home what moved him so deeply.',
       'This passion led him to study sound at the La Metro School of Design and Audiovisual Communication, where he graduated as a Higher Technician in Sound in 2021. Since his 2025 debut on 3rd Avenue with Three of a Kind #033, he has collaborated with labels such as BBop Music, Mustache Crew Records, and DUBLUCID —releasing his latest EP, Hibiki, through the latter— as well as crafting an official remix of “Paul’s Tape” by Valentín Ciancio.',

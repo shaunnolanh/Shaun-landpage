@@ -62,7 +62,7 @@ export const es: Dictionary = {
     // Textos del equipo (28/10/2026): versión corta y bio completa.
     short:
       'Productor y DJ de progressive house radicado en La Falda, Argentina. Titulado como Técnico Superior en Sonido por La Metro (2021), ha editado música en sellos como 3rd Avenue, BBop Music, Mustache Crew Records y DUBLUCID. Con lanzamientos respaldados por referentes de la escena global, actualmente trabaja en nuevos proyectos y remixes para 3rd Avenue y Future Avenue.',
-    more: 'Leer bio completa',
+    photoAlt: 'Retrato de Shaun Nolanh frente a una enredadera con flores, en blanco y negro.',
     long: [
       'Shaun Nolanh es un productor y DJ de progressive house radicado en La Falda, Córdoba, Argentina. Originario de la emblemática ciudad turística de Villa Carlos Paz, desde muy joven se adentró en la escena electrónica asistiendo a presentaciones de referentes como Nick Warren y Guy J, lo que lo inspiró a intentar replicar en su hogar aquello que tanto lo cautivaba.',
       'Este impulso lo llevó a formarse en la Escuela de Diseño y Comunicación Audiovisual “La Metro”, donde se tituló como Técnico Superior en Sonido en 2021. Desde su debut en 3rd Avenue en 2025 con Three of a Kind #033, ha colaborado con sellos como BBop Music, Mustache Crew Records y DUBLUCID —sello con el que editó su último EP, Hibiki—, además de realizar un remix oficial de «Paul’s Tape» de Valentín Ciancio.',

@@ -1,4 +1,6 @@
 ---
+import { Picture } from 'astro:assets';
+import portrait from '../assets/photos/shaun-retrato.jpg';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -7,18 +9,27 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+// The full bio, in its three paragraphs. The short version (`about.short`) repeats its first lines,
+// so it isn't shown here; it stays in i18n for the press kit / future use.
+const paragraphs = t.about.long;
 ---
 
-<section class="section" id="about" aria-labelledby="about-title">
-  <div class="container about">
-    <h2 class="section__title" id="about-title">{t.about.title}</h2>
-    <div class="about__body">
-      <p class="about__short">{t.about.short}</p>
-      <!-- <details> opens and closes without JS and is keyboard accessible out of the box -->
-      <details class="about__more">
-        <summary class="mono">{t.about.more}</summary>
-        {t.about.long.map((p) => <p>{p}</p>)}
-      </details>
+<section class="section section--alt" id="about" aria-labelledby="about-title">
+  <div class="container container--5xl">
+    <h2 class="section__title reveal" id="about-title">{t.about.title}</h2>
+    <div class="about">
+      <Picture
+        class="about__photo reveal"
+        src={portrait}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960]}
+        sizes="(min-width: 64rem) 24rem, (min-width: 48rem) 40vw, 100vw"
+        alt={t.about.photoAlt}
+        loading="lazy"
+      />
+      <div class="about__bio reveal">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
     </div>
   </div>
 </section>
@@ -29,56 +40,39 @@ const t = useTranslations(lang);
     gap: var(--space-l);
   }
 
-  .about__body {
+  /* Portrait crop of the landscape photo, centered on the face */
+  .about :global(.about__photo) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    max-height: 32rem;
+    object-fit: cover;
+    object-position: 50% 45%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .about__bio {
     display: grid;
     gap: var(--space-m);
-    max-width: 40rem;
+    color: var(--text-70);
+    font-size: var(--text-lg);
+    line-height: 1.8;
   }
 
-  .about__short {
-    font-size: var(--step-1);
-    line-height: 1.5;
-  }
-
-  .about__more {
-    display: grid;
-    gap: var(--space-s);
-    color: var(--fog-300);
-  }
-
-  .about__more p + p,
-  .about__more summary + p {
-    margin-top: var(--space-s);
-  }
-
-  summary {
-    display: inline-flex;
-    gap: 0.6em;
-    align-items: center;
-    width: fit-content;
-    min-height: 2.75rem;
-    text-transform: uppercase;
-    color: var(--moon-100);
-    cursor: pointer;
-    list-style: none;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  summary::after {
-    content: '+';
-    transition: transform 0.3s var(--ease-slow);
-  }
-
-  details[open] summary::after {
-    transform: rotate(45deg);
-  }
-
-  @media (min-width: 64rem) {
+  /* Desktop: photo + text in two columns */
+  @media (min-width: 48rem) {
     .about {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 2fr 3fr;
+      align-items: start;
+    }
+
+    .about :global(.about__photo) {
+      max-height: none;
+    }
+
+    .about__bio {
+      font-size: var(--text-xl);
     }
   }
 </style>
