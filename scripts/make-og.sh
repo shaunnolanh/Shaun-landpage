@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Renders the Open Graph card and the Apple touch icon from the HTML templates in scripts/og/.
-# Run with `npm run og` (after `npm run media`, since the card uses the first Music frame).
+# Run with `npm run og`. The card uses Shaun's portrait (src/assets/photos/shaun-retrato.jpg).
 # Uses the Chrome already installed (headless) instead of adding puppeteer as a dependency.
 set -euo pipefail
 
@@ -18,7 +18,7 @@ shoot() { # template, width, height, output
 
 echo "→ og.png (1200×630)"
 shoot og.html 1200 630 "$TMP/og.png"
-# 256-color palette: the card is mostly flat night blue, so this keeps it well under 300 KB.
+# 256-color palette: the card is a black-and-white photo plus white text, so 256 greys lose nothing visible.
 "$FFMPEG" -v error -y -i "$TMP/og.png" -vf "split[a][b];[a]palettegen=max_colors=256[p];[b][p]paletteuse=dither=sierra2_4a" public/og.png
 
 echo "→ apple-touch-icon.png (180×180)"

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../src/styles/tokens.css" />
-    <link rel="stylesheet" href="../../node_modules/@fontsource-variable/unbounded/wght.css" />
+    <link rel="stylesheet" href="../../node_modules/@fontsource-variable/montserrat/wght.css" />
     <style>
       html,
       body {
@@ -12,7 +12,7 @@
         width: 540px;
         height: 540px;
         overflow: hidden;
-        background: var(--night-950);
+        background: var(--black);
       }
 
       body {
@@ -20,28 +20,16 @@
         place-items: center;
       }
 
-      /* The ember: the only light, drawn with a radial gradient like on the site */
-      .ember {
-        position: absolute;
-        top: 92px;
-        right: 104px;
-        width: 120px;
-        height: 120px;
-        background: radial-gradient(circle, var(--glow-400) 0 14%, color-mix(in srgb, var(--glow-500) 45%, transparent) 22%, transparent 62%);
-      }
-
       span {
-        font-family: var(--font-display);
-        font-size: 216px;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        color: var(--moon-100);
-        transform: translateY(24px);
+        font-family: var(--font);
+        font-size: 230px;
+        font-weight: 700;
+        letter-spacing: var(--tracking-tighter);
+        color: var(--text);
       }
     </style>
   </head>
   <body>
-    <div class="ember"></div>
     <span>SN</span>
   </body>
 </html>

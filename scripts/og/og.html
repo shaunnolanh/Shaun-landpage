@@ -4,8 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../src/styles/tokens.css" />
-    <link rel="stylesheet" href="../../node_modules/@fontsource-variable/unbounded/wght.css" />
-    <link rel="stylesheet" href="../../node_modules/@fontsource-variable/jetbrains-mono/wght.css" />
+    <link rel="stylesheet" href="../../node_modules/@fontsource-variable/montserrat/wght.css" />
     <style>
       html,
       body {
@@ -13,35 +12,44 @@
         width: 1200px;
         height: 630px;
         overflow: hidden;
-        background: var(--night-950);
+        background: var(--black);
       }
 
-      /* The hand with the lit cigarette (first frame of the Music scene): the ember is the only light */
-      .scene {
+      /* Shaun's portrait (the one in About) on the right, so the name on the left never covers the face */
+      .photo {
         position: absolute;
         top: 0;
-        left: 470px;
+        right: 0;
+        width: 640px;
         height: 630px;
-        mix-blend-mode: lighten;
-        mask-image: linear-gradient(to bottom, black 70%, transparent), linear-gradient(to right, transparent, black 12%);
-        mask-composite: intersect;
+        object-fit: cover;
+        object-position: 50% 40%;
+      }
+
+      /* Fades the photo's left edge into the black, and darkens it a little */
+      .shade {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(to right, var(--black) 47%, color-mix(in srgb, var(--black) 30%, transparent) 70%, color-mix(in srgb, var(--black) 20%, transparent)),
+          linear-gradient(to top, color-mix(in srgb, var(--black) 50%, transparent), transparent 45%);
       }
 
       .text {
         position: absolute;
         left: 72px;
-        bottom: 84px;
+        bottom: 80px;
       }
 
       h1 {
-        margin: 0 0 28px;
-        font-family: var(--font-display);
-        font-size: 104px;
-        font-weight: 800;
+        margin: 0 0 24px;
+        font-family: var(--font);
+        font-size: 112px;
+        font-weight: 700;
         line-height: 0.92;
-        letter-spacing: -0.02em;
+        letter-spacing: var(--tracking-tighter);
         text-transform: uppercase;
-        color: var(--moon-100);
+        color: var(--text);
       }
 
       h1 span {
@@ -50,16 +58,18 @@
 
       p {
         margin: 0;
-        font-family: var(--font-mono);
+        font-family: var(--font);
         font-size: 22px;
-        letter-spacing: 0.08em;
+        font-weight: 500;
+        letter-spacing: var(--tracking-widest);
         text-transform: uppercase;
-        color: var(--fog-300);
+        color: var(--text-80);
       }
     </style>
   </head>
   <body>
-    <img class="scene" src="../../public/media/music/desktop/f001.webp" alt="" />
+    <img class="photo" src="../../src/assets/photos/shaun-retrato.jpg" alt="" />
+    <div class="shade"></div>
     <div class="text">
       <h1><span>Shaun</span><span>Nolanh</span></h1>
       <p>Progressive House · Deep House · Organic House</p>
