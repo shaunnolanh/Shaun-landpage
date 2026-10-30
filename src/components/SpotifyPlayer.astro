@@ -1,7 +1,7 @@
 ---
 // One Spotify player under the carousel, driven by the Spotify iFrame API.
-// Zero Spotify weight on page load: the API script is injected on the first interaction
-// (click on the facade, or the first time the visitor changes cover). Then:
+// The API script loads with the page (the player shows up without a click; the facade is only a
+// placeholder until it's ready, and a click on it means "play"). Then:
 //   createController(...) once, and on every `track:change` → loadEntity(url?theme=0).
 //   loadEntity stops playback (verified), so if it was playing we call play() on the next `ready`.
 // EPs/albums use the album embed (352px, with its track list); singles the compact one (152px).
@@ -140,7 +140,7 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
         controller.loadEntity(withTheme(url));
       } else {
         facade.hidden = state === 'ready';
-        loadApi(); // first cover change counts as interaction
+        loadApi(); // no-op if it's already loading
       }
     }
 
@@ -167,6 +167,9 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
       playOnReady = true; // the click is the intent to listen
       loadApi();
     });
+
+    // Load the player right away, without playing
+    loadApi();
 
     carousel.addEventListener('track:change', (event) => {
       const detail = (event as CustomEvent<Detail>).detail;

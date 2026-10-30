@@ -1,6 +1,6 @@
 ---
-// "Facade" player: shows a lightweight button and only loads the real
-// SoundCloud/Spotify/Mixcloud iframe after the visitor clicks. Zero third-party weight on first load.
+// Player embed: the SoundCloud/Spotify/Mixcloud/Beatport iframe, right in the HTML (it shows up loaded,
+// no click needed). In controlled mode it's a placeholder button instead (see `controlled`).
 import type { Embed } from '../data/music';
 import { toEmbed } from '../data/embed';
 import { useTranslations, type Lang } from '../i18n/utils';
@@ -9,8 +9,8 @@ interface Props {
   embed: Embed;
   lang: Lang;
   /**
-   * Controlled mode: same facade, but it doesn't create the iframe. Another script owns the player
-   * (the Music carousel + Spotify iFrame API) and listens for clicks on the button. Value = provider name.
+   * Controlled mode: a placeholder button instead of the iframe. Another script owns the player
+   * (the Music carousel + Spotify iFrame API) and swaps it in; a click on the button means "play".
    */
   controlled?: { name: string; height: number };
 }
@@ -23,10 +23,12 @@ const height = player?.height ?? 166;
 const title = embed.title ?? `${player?.name ?? ''} player`.trim();
 ---
 
-<div class="embed" style={`--embed-h: ${height}px`} data-embed-src={player?.src} data-embed-title={title} data-embed-provider={player?.provider}>
+<div class="embed" style={`--embed-h: ${height}px`}>
   {
-    player ? (
-      <button class="embed__play" type="button" data-embed-controlled={controlled ? '' : undefined}>
+    player?.src ? (
+      <iframe src={player.src} title={title} width="100%" height={height} allow="autoplay; encrypted-media" />
+    ) : player ? (
+      <button class="embed__play" type="button" data-embed-controlled>
         <span class="embed__icon" aria-hidden="true">
           <svg width="14" height="14" viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>
         </span>
@@ -43,29 +45,6 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
     )
   }
 </div>
-
-<script>
-  document.querySelectorAll<HTMLElement>('.embed[data-embed-src]').forEach((el) => {
-    el.querySelector('button')?.addEventListener(
-      'click',
-      () => {
-        const src = new URL(el.dataset.embedSrc!);
-        // Start playing right away (the click already was the intent). Spotify doesn't allow it.
-        if (el.dataset.embedProvider === 'soundcloud') src.searchParams.set('auto_play', 'true');
-        if (el.dataset.embedProvider === 'mixcloud') src.searchParams.set('autoplay', '1');
-
-        const iframe = document.createElement('iframe');
-        iframe.src = src.toString();
-        iframe.title = el.dataset.embedTitle!;
-        iframe.allow = 'autoplay; encrypted-media';
-        iframe.width = '100%';
-        iframe.height = getComputedStyle(el).getPropertyValue('--embed-h');
-        el.replaceChildren(iframe);
-      },
-      { once: true },
-    );
-  });
-</script>
 
 <style>
   .embed {
