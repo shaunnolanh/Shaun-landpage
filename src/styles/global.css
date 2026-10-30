@@ -145,6 +145,27 @@ a {
   text-transform: uppercase;
 }
 
+/* Small data line (types, labels, years, notes). The name is kept from v1 so the carousel and player
+   markup don't change; in v2 it's Montserrat, not a monospace font. */
+.mono {
+  font-size: var(--text-sm);
+  letter-spacing: 0.05em;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2em 0.75em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-70);
+  white-space: nowrap;
+}
+
 /* Visible placeholder for content we don't have yet */
 .pending {
   font-size: 0.85em;

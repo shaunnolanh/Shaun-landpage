@@ -225,6 +225,8 @@ const coverAlt = (item: (typeof items)[number]) =>
   }
 
   .cf__track {
+    /* The script centers a cover with slide.offsetLeft: the track has to be the slides' offsetParent */
+    position: relative;
     display: flex;
     gap: clamp(1rem, 4vw, 2.5rem);
     margin: 0 calc(var(--gutter) * -1);
@@ -263,18 +265,18 @@ const coverAlt = (item: (typeof items)[number]) =>
     aspect-ratio: 1;
     border-radius: 10px;
     object-fit: cover;
-    border: 1px solid color-mix(in srgb, var(--blue-600) 60%, transparent);
+    border: 1px solid var(--line);
     user-select: none;
     /* Reflection below (Safari / Chrome; Firefox simply shows none) */
-    -webkit-box-reflect: below 6px linear-gradient(transparent 62%, color-mix(in srgb, var(--night-950) 35%, transparent));
+    -webkit-box-reflect: below 6px linear-gradient(transparent 62%, color-mix(in srgb, var(--black) 35%, transparent));
   }
 
   .cf__placeholder {
     display: grid;
     place-items: center;
     padding: var(--space-s);
-    background: var(--night-800);
-    color: var(--fog-300);
+    background: var(--neutral-950);
+    color: var(--text-60);
     text-align: center;
   }
 
@@ -315,20 +317,24 @@ const coverAlt = (item: (typeof items)[number]) =>
   }
 
   .cf__title {
-    font-family: var(--font-display);
-    font-size: var(--step-1);
+    font-size: var(--text-xl);
     font-weight: 700;
+    letter-spacing: var(--tracking-tight);
     line-height: 1.2;
   }
 
-  .cf__artists,
+  .cf__artists {
+    color: var(--text-70);
+  }
+
   .cf__meta {
-    color: var(--fog-300);
+    color: var(--text-60);
   }
 
   .cf__meta {
     margin-top: 0.25rem;
-    font-size: var(--step--1);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
   }
 
@@ -337,17 +343,19 @@ const coverAlt = (item: (typeof items)[number]) =>
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
-    border: 1px solid var(--blue-600);
+    border: 1px solid var(--line-strong);
     border-radius: 50%;
     background: transparent;
-    color: var(--moon-100);
+    color: var(--text);
     cursor: pointer;
-    transition: border-color 0.3s var(--ease-slow), background-color 0.3s var(--ease-slow);
+    transition:
+      border-color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
   }
 
   .cf__nav:hover {
-    border-color: var(--fog-300);
-    background: var(--night-800);
+    border-color: var(--line-hover);
+    background: var(--fill);
   }
 
   .cf__nav[hidden] {

@@ -35,9 +35,9 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
   <div class="sp__tracks" role="group" aria-label={t.music.ownTracks} hidden data-own-tracks></div>
 
   <div class="sp__stage" style={`--sp-h: ${startHeight}px`} data-stage>
-    <!-- Facade: the section's single orange light (the hand's ember passes to it, see MusicScene) -->
+    <!-- Facade: loads the Spotify iFrame API on the first click -->
     <div class="sp__facade" data-facade hidden={!startSpotify}>
-      <Embed embed={{ link: null, title: t.music.listenOnSpotify }} lang={lang} glow controlled={{ name: 'Spotify', height: startHeight }} />
+      <Embed embed={{ link: null, title: t.music.listenOnSpotify }} lang={lang} controlled={{ name: 'Spotify', height: startHeight }} />
     </div>
     <!-- createController replaces this element with Spotify's iframe -->
     <div class="sp__frame" data-frame hidden><div data-mount></div></div>
@@ -195,22 +195,23 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
   .sp {
     display: grid;
     gap: var(--space-s);
-    max-width: 40rem;
-    margin: var(--space-m) auto 0;
+    margin-top: var(--space-l);
   }
 
   .sp__buy,
   .sp__fallback {
     justify-self: center;
     padding-block: 0.25rem;
-    color: var(--fog-300);
+    color: var(--text-70);
     text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
     text-underline-offset: 0.25em;
+    transition: color var(--duration) var(--ease);
   }
 
   .sp__buy:hover,
   .sp__fallback:hover {
-    color: var(--moon-100);
+    color: var(--text);
   }
 
   .sp__tracks {
@@ -223,20 +224,22 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
   .sp__tracks :global(.sp__track) {
     min-height: 2.75rem;
     padding: 0.5rem 1rem;
-    border: 1px solid var(--blue-600);
-    border-radius: 999px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
     background: transparent;
-    color: var(--fog-300);
-    font-size: var(--step--1);
+    color: var(--text-70);
+    font-size: var(--text-xs);
     text-transform: uppercase;
     cursor: pointer;
-    transition: border-color 0.3s var(--ease-slow), color 0.3s var(--ease-slow);
+    transition:
+      border-color var(--duration) var(--ease),
+      color var(--duration) var(--ease);
   }
 
   .sp__tracks :global(.sp__track:hover),
   .sp__tracks :global(.sp__track[aria-pressed='true']) {
-    border-color: var(--fog-300);
-    color: var(--moon-100);
+    border-color: var(--line-hover);
+    color: var(--text);
   }
 
   /* Reserves the player's height (compact 152px / album 352px) so nothing jumps; the change is smooth.
@@ -244,7 +247,7 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
      single change the visitor asked for. */
   .sp__stage {
     height: var(--sp-h);
-    transition: height 0.5s var(--ease-slow);
+    transition: height 0.5s var(--ease-out);
   }
 
   .sp__facade,
@@ -262,19 +265,19 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
     width: 100%;
     height: 100%;
     border: 0;
-    border-radius: 12px;
+    border-radius: var(--radius);
   }
 
   .sp__pending {
     display: grid;
     place-items: center;
     height: 100%;
-    border: 1px solid var(--blue-600);
+    border: 1px solid var(--line);
     border-radius: var(--radius);
   }
 
   .sp__note {
-    color: var(--fog-300);
+    color: var(--text-60);
     text-align: center;
   }
 

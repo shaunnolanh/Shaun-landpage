@@ -8,8 +8,6 @@ import { useTranslations, type Lang } from '../i18n/utils';
 interface Props {
   embed: Embed;
   lang: Lang;
-  /** The section's single orange light. */
-  glow?: boolean;
   /**
    * Controlled mode: same facade, but it doesn't create the iframe. Another script owns the player
    * (the Music carousel + Spotify iFrame API) and listens for clicks on the button. Value = provider name.
@@ -17,7 +15,7 @@ interface Props {
   controlled?: { name: string; height: number };
 }
 
-const { embed, lang, glow = false, controlled } = Astro.props;
+const { embed, lang, controlled } = Astro.props;
 const t = useTranslations(lang);
 // Whatever was pasted in `link` becomes { provider, src, height }; unknown links stop the build.
 const player = controlled ? { ...controlled, src: undefined, provider: undefined } : embed.link ? toEmbed(embed.link) : null;
@@ -28,12 +26,7 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
 <div class="embed" style={`--embed-h: ${height}px`} data-embed-src={player?.src} data-embed-title={title} data-embed-provider={player?.provider}>
   {
     player ? (
-      <button
-        class:list={['embed__play', glow && 'embed__play--glow']}
-        type="button"
-        data-embed-controlled={controlled ? '' : undefined}
-        data-music-light={controlled && glow ? '' : undefined}
-      >
+      <button class="embed__play" type="button" data-embed-controlled={controlled ? '' : undefined}>
         <span class="embed__icon" aria-hidden="true">
           <svg width="14" height="14" viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>
         </span>
@@ -78,10 +71,15 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
   .embed {
     /* Reserve the player's height so nothing jumps when it loads */
     min-height: var(--embed-h);
-    border: 1px solid var(--blue-600);
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    background: var(--night-800);
+    background: var(--black);
     overflow: hidden;
+    transition: border-color var(--duration) var(--ease);
+  }
+
+  .embed:hover {
+    border-color: var(--line-strong);
   }
 
   .embed :global(iframe) {
@@ -103,63 +101,24 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
     cursor: pointer;
   }
 
+  /* White play button, black triangle */
   .embed__icon {
     display: grid;
     flex: none;
     place-items: center;
     width: 3.5rem;
     height: 3.5rem;
-    border: 1px solid var(--fog-300);
     border-radius: 50%;
-    transition: background-color 0.3s var(--ease-slow);
-  }
-
-  .embed__play--glow .embed__icon {
-    position: relative;
-    isolation: isolate;
-    border-color: var(--glow-500);
-    background: var(--glow-500);
-    color: var(--night-950);
-  }
-
-  /* The ember breathes: a slow radial glow around the play button (only while it holds the light) */
-  .embed__play--glow .embed__icon::before {
-    content: '';
-    position: absolute;
-    inset: -45%;
-    z-index: -1;
-    border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--glow-400) 55%, transparent) 30%, transparent 70%);
-    pointer-events: none;
-    /* ease-in-out, not --ease-slow: an ease-out curve on a back-and-forth loop jumps and then holds */
-    animation: ember-breathe 2.5s ease-in-out infinite alternate;
-  }
-
-  /* 2.5s each way = one 5s breath */
-  @keyframes ember-breathe {
-    from {
-      opacity: 0.3;
-      transform: scale(0.85);
-    }
-    to {
-      opacity: 0.85;
-      transform: scale(1.1);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .embed__play--glow .embed__icon::before {
-      animation: none;
-      opacity: 0.6;
-    }
+    background: var(--white);
+    color: var(--black);
+    transition:
+      transform var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
   }
 
   .embed__play:hover .embed__icon {
-    background: var(--blue-600);
-  }
-
-  .embed__play--glow:hover .embed__icon {
-    background: var(--glow-400);
+    transform: scale(1.05);
+    background: var(--text-80);
   }
 
   .embed__text {
@@ -168,11 +127,11 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
   }
 
   .embed__title {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   .embed__note {
-    color: var(--fog-300);
+    color: var(--text-60);
   }
 
   .embed__pending {

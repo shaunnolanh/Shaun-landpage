@@ -13,8 +13,8 @@ const t = useTranslations(lang);
 ---
 
 <section class="section" id="music" aria-labelledby="music-title">
-  <div class="container music">
-    <header class="section__head">
+  <div class="container container--4xl music">
+    <header class="section__head reveal">
       <h2 class="section__title" id="music-title">{t.music.title}</h2>
       <p class="section__lead">{t.music.lead}</p>
     </header>
@@ -24,7 +24,7 @@ const t = useTranslations(lang);
       <SpotifyPlayer lang={lang} />
     </div>
 
-    <h3 class="music__subtitle">{t.music.releases}</h3>
+    <h3 class="music__subtitle reveal">{t.music.releases}</h3>
     <ul class="releases">
       {
         releases.map((r, i) => (
@@ -65,28 +65,24 @@ const t = useTranslations(lang);
 </script>
 
 <style>
-  /* In front of the hand scene (MusicScene, z-index 1): the cigarette falls behind the header and the covers.
-     z-index on the children only. No `isolation` on .music: the scene blends with the page itself. */
-  .music :global(.section__head),
-  .music__tracks {
-    position: relative;
-    z-index: 2;
-  }
-
   .music__tracks {
     margin-bottom: var(--space-xl);
   }
 
   .music__subtitle {
     margin-bottom: var(--space-m);
-    font-size: var(--step-1);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-widest);
+    text-align: center;
     text-transform: uppercase;
+    color: var(--text-60);
   }
 
   .releases {
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--blue-600);
+    border-top: 1px solid var(--line);
   }
 
   .release {
@@ -94,7 +90,7 @@ const t = useTranslations(lang);
     display: grid;
     gap: var(--space-xs);
     padding-block: var(--space-m);
-    border-bottom: 1px solid var(--blue-600);
+    border-bottom: 1px solid var(--line);
   }
 
   /* Cascade: hidden only once JS has added data-reveal; 80ms between rows, capped at 400ms */
@@ -108,12 +104,12 @@ const t = useTranslations(lang);
     opacity: 1;
     transform: none;
     transition:
-      opacity 0.9s var(--ease-slow),
-      transform 0.9s var(--ease-slow);
+      opacity 0.8s var(--ease-out),
+      transform 0.8s var(--ease-out);
     transition-delay: min(calc(var(--i) * 80ms), 400ms);
   }
 
-  /* A --blue-400 line draws itself left to right under the row on hover / keyboard focus inside it */
+  /* A white line draws itself left to right under the row on hover / keyboard focus inside it */
   .release::after {
     content: '';
     position: absolute;
@@ -121,10 +117,10 @@ const t = useTranslations(lang);
     right: 0;
     bottom: -1px;
     height: 1px;
-    background: var(--blue-400);
+    background: var(--line-hover);
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 0.6s var(--ease-slow);
+    transition: transform 0.6s var(--ease-out);
   }
 
   .release:hover::after,
@@ -139,32 +135,36 @@ const t = useTranslations(lang);
   }
 
   .release__title {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   .release__title a {
     text-decoration: none;
+    transition: color var(--duration) var(--ease);
   }
 
   .release__title a:hover {
-    color: var(--moon-100);
+    color: var(--text-70);
   }
 
   .releases__all {
-    display: inline-block;
-    margin-top: var(--space-m);
+    display: block;
+    width: fit-content;
+    margin: var(--space-m) auto 0;
     padding-block: 0.5rem;
-    color: var(--fog-300);
+    color: var(--text-70);
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     text-underline-offset: 0.25em;
+    transition: color var(--duration) var(--ease);
   }
 
   .releases__all:hover {
-    color: var(--moon-100);
+    color: var(--text);
   }
 
   .release__artists {
-    color: var(--fog-300);
+    color: var(--text-70);
   }
 
   .release__meta {
@@ -172,7 +172,7 @@ const t = useTranslations(lang);
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-xs) var(--space-s);
-    color: var(--fog-300);
+    color: var(--text-60);
   }
 
   @media (min-width: 48rem) {
