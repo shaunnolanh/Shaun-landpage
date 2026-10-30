@@ -23,7 +23,7 @@ const paragraphs = t.about.long;
         src={portrait}
         formats={['avif', 'webp']}
         widths={[480, 720, 960]}
-        sizes="(min-width: 64rem) 24rem, (min-width: 48rem) 40vw, 100vw"
+        sizes="(min-width: 64rem) 24rem, 100vw"
         alt={t.about.photoAlt}
         loading="lazy"
       />
@@ -60,8 +60,14 @@ const paragraphs = t.about.long;
     line-height: 1.8;
   }
 
-  /* Desktop: photo + text in two columns */
   @media (min-width: 48rem) {
+    .about__bio {
+      font-size: var(--text-xl);
+    }
+  }
+
+  /* Desktop: photo + text in two columns (on tablets the bio column would get too narrow) */
+  @media (min-width: 64rem) {
     .about {
       grid-template-columns: 2fr 3fr;
       align-items: start;
@@ -69,10 +75,6 @@ const paragraphs = t.about.long;
 
     .about :global(.about__photo) {
       max-height: none;
-    }
-
-    .about__bio {
-      font-size: var(--text-xl);
     }
   }
 </style>

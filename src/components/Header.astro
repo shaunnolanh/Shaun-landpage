@@ -158,6 +158,7 @@ const links = [
 
   .header__nav a {
     font-size: var(--text-sm);
+    white-space: nowrap;
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     text-decoration: none;
@@ -212,8 +213,9 @@ const links = [
     transform: rotate(-90deg);
   }
 
-  /* Mobile: the nav drops down under the bar, behind the toggle (only when JS is running). */
-  @media (max-width: 47.99rem) {
+  /* Mobile and tablet (four links + EN/ES don't fit on one line under 64rem): the nav drops down
+     under the bar, behind the toggle (only when JS is running). */
+  @media (max-width: 63.99rem) {
     .header__nav ul {
       gap: var(--space-m);
     }
