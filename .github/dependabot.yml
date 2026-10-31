@@ -1,0 +1,11 @@
+# Weekly npm updates in one grouped pull request (security updates still come on their own, right away).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
