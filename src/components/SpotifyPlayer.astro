@@ -41,7 +41,7 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
   <!-- Only for releases shared with other artists: Shaun's tracks, one button each (filled by the script) -->
   <div class="sp__tracks" role="group" aria-label={t.music.ownTracks} hidden data-own-tracks></div>
 
-  <div class="sp__stage" style={`--sp-h: ${startHeight}px`} data-stage>
+  <div class="sp__stage" data-stage>
     <!-- Facade: loads the Spotify iFrame API on the first click -->
     <div class="sp__facade" data-facade hidden={!startSpotify}>
       <Embed embed={{ link: null, title: t.music.listenOnSpotify }} lang={lang} controlled={{ name: 'Spotify', height: startHeight }} />
@@ -101,6 +101,9 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
       stage.style.setProperty('--sp-h', `${h}px`);
       facade.querySelector<HTMLElement>('.embed')?.style.setProperty('--embed-h', `${h}px`);
     }
+
+    // Initial height of the stage and the facade (set from here: an inline `style` attribute would break the CSP)
+    if (spotify) setHeight(spotify);
 
     function showFallback() {
       state = 'failed';
@@ -259,7 +262,8 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
      An exception to "transform/opacity only": an iframe can't be scaled without distorting it, and it's a
      single change the visitor asked for. */
   .sp__stage {
-    height: var(--sp-h);
+    /* Set by the script; without JS, the album height (the initial release, Case 701, is an EP) */
+    height: var(--sp-h, 352px);
     transition: height 0.5s var(--ease-out);
   }
 

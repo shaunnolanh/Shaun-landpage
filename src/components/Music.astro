@@ -27,8 +27,8 @@ const t = useTranslations(lang);
     <h3 class="music__subtitle reveal">{t.music.releases}</h3>
     <ul class="releases">
       {
-        releases.map((r, i) => (
-          <li class="release" style={`--i: ${i}`}>
+        releases.map((r) => (
+          <li class="release">
             <div class="release__main">
               <p class="release__title">
                 {r.title && r.url ? (
@@ -61,6 +61,8 @@ const t = useTranslations(lang);
 <script>
   // Time-based cascade, so it runs on IntersectionObserver in every browser (scroll timelines have no milliseconds).
   import { reveal } from '../scripts/reveal';
+  // Each row's position for the cascade delay, set here (an inline `style` attribute would break the CSP)
+  document.querySelectorAll<HTMLElement>('.release').forEach((row, i) => row.style.setProperty('--i', String(i)));
   reveal('.release');
 </script>
 

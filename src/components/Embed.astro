@@ -23,7 +23,7 @@ const height = player?.height ?? 166;
 const title = embed.title ?? `${player?.name ?? ''} player`.trim();
 ---
 
-<div class="embed" style={`--embed-h: ${height}px`}>
+<div class="embed">
   {
     player?.src ? (
       <iframe src={player.src} title={title} width="100%" height={height} allow="autoplay; encrypted-media" />
@@ -47,9 +47,9 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
 </div>
 
 <style>
+  /* No inline `style` (the CSP doesn't allow it): an iframe reserves its height with its `height` attribute;
+     the controlled facade gets --embed-h from SpotifyPlayer's script (166px until then). */
   .embed {
-    /* Reserve the player's height so nothing jumps when it loads */
-    min-height: var(--embed-h);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--black);
@@ -62,8 +62,8 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
   }
 
   .embed :global(iframe) {
+    display: block;
     width: 100%;
-    height: var(--embed-h);
     border: 0;
   }
 
@@ -72,7 +72,7 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
     align-items: center;
     gap: var(--space-m);
     width: 100%;
-    min-height: var(--embed-h);
+    min-height: var(--embed-h, 166px);
     padding: var(--space-m);
     border: 0;
     background: none;
@@ -116,7 +116,7 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
   .embed__pending {
     display: grid;
     place-items: center;
-    min-height: var(--embed-h);
+    min-height: 166px;
     padding: var(--space-m);
   }
 </style>
