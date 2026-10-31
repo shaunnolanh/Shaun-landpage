@@ -14,7 +14,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 - `src/pages/index.astro` y `src/pages/es/index.astro` renderizan `src/components/HomePage.astro` y solo le pasan el prop `lang`.
 - Orden: Header · Hero · About · Music · Radio Silence (`Sets`) · Redes (`Socials`) · Contacto (`Contact`) · Footer, más `BookingDialog` (el formulario de booking, una sola vez en el HTML).
 - Cada sección recibe `lang` y llama a `useTranslations(lang)` (`src/i18n/utils.ts`). El ruteo usa el i18n nativo de Astro (`prefixDefaultLocale: false`). `Base.astro` emite el canonical y los `hreflang`, y tiene un slot `head` para precargas de la página (la foto del hero).
-- JS mínimo, en un `<script>` inline chico dentro de cada componente: header (fondo al scrollear, menú mobile), diálogo de booking, reproductor de Spotify, envío de formularios y email ofuscado.
+- JS mínimo, en un `<script>` inline chico dentro de cada componente: header (fondo al scrollear, menú mobile), diálogo de booking, carga de embeds y del reproductor de Spotify, envío de formularios y email ofuscado.
 - Al recargar o volver con atrás/adelante, la página arranca arriba (script `is:inline` al principio del `<head>` en `Base.astro`). Un link nuevo con `#sección` se respeta y la bfcache no se toca.
 
 ## Convenciones
@@ -65,7 +65,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Embeds, formularios y email
 
-- **Embeds** (`Embed.astro`): **cargan con la página, sin clic** (pedido de Shaun, 2026-10-29): el `<iframe>` de Beatport, SoundCloud, Spotify o Mixcloud va directo en el HTML. Costo: ~2,2 MB más y cookies de terceros desde la carga (Lighthouse "Best practices" ~79). La fachada con botón queda solo en modo `controlled` (el reproductor de Spotify, mientras carga).
+- **Embeds** (`Embed.astro`): **aparecen cargados, sin clic** (pedido de Shaun, 2026-10-29), pero el `<iframe>` de Beatport, SoundCloud, Spotify o Mixcloud recibe su `src` recién cuando la sección está a ~800 px de la pantalla (`IntersectionObserver`; `loading="lazy"` solo no alcanza: Chrome baja iframes lazy hasta 2500 px antes). Así quien no llega a la música no le pasa su IP ni recibe cookies de esas plataformas. Sin JS, un `<noscript>` con el iframe. La fachada con botón queda solo en modo `controlled` (el reproductor de Spotify, mientras carga).
   - SoundCloud: un **widget pegado** (`<iframe>` o `src` de `w.soundcloud.com/player`) se usa **tal cual**, con sus parámetros y su `height` (Radio Silence: el clásico de 166 px). Un link de página (`soundcloud.com/…`) se convierte al modo `visual` (oscuro, 300 px) con el acento leído de `--white` en `tokens.css`.
   - Beatport bloquea el acceso automático: los datos los pega el equipo (código Embed o lista de tracks); no intentar leer beatport.com.
   - En `src/data/music.ts` se pega en `link` el link normal del track/set (en Beatport, la página del track o su código Embed) (Compartir → Copiar link), el `src` del iframe o el `<iframe>` completo. `toEmbed` (`src/data/embed.ts`) detecta la plataforma, arma la URL del reproductor y su altura.
@@ -83,7 +83,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 - **Carrusel** (`TrackCarousel.astro`): coverflow nativo, sin dependencias. `scroll-snap` para el swipe, el giro 3D con `animation-timeline: view(inline)` dentro de `@supports` (longhands), reflejo con `-webkit-box-reflect`. Un script chico convierte cada portada en botón "Seleccionar …", maneja flechas/teclado y emite `track:change`. Sin JS: fila de links a Spotify. Reduced motion: sin 3D.
   - El script centra con `slide.offsetLeft`: `.cf__track` tiene `position: relative` para ser el `offsetParent` de las portadas. Sin eso, el carrusel arranca en otra portada en desktop.
-- **Reproductor** (`SpotifyPlayer.astro`): Spotify iFrame API, cargada con la página (sin reproducir solo; un clic en la fachada mientras carga = reproducir). Al iframe de Spotify se le pone `title` (viene sin él). Cambiar de portada → `loadEntity(url?theme=0)` (álbum o tema); `loadEntity` corta la reproducción, así que si estaba sonando se llama `play()` en el siguiente `ready`. La fachada es `Embed.astro` en modo `controlled`. El reproductor de Spotify queda visible (términos de Spotify); si la API falla o tarda 8 s, link "Escuchar en Spotify".
+- **Reproductor** (`SpotifyPlayer.astro`): Spotify iFrame API, cargada cuando Music está a ~800 px de la pantalla o con la primera interacción (sin reproducir solo; un clic en la fachada mientras carga = reproducir). Las alturas (`--sp-h`, `--embed-h`) las pone el script, no un atributo `style` (la CSP no lo permite). Al iframe de Spotify se le pone `title` (viene sin él). Cambiar de portada → `loadEntity(url?theme=0)` (álbum o tema); `loadEntity` corta la reproducción, así que si estaba sonando se llama `play()` en el siguiente `ready`. La fachada es `Embed.astro` en modo `controlled`. El reproductor de Spotify queda visible (términos de Spotify); si la API falla o tarda 8 s, link "Escuchar en Spotify".
 - **Sin app de Spotify:** la Web API exige que el dueño tenga Premium. Se usa **oEmbed** (público): `npm run spotify:sync` baja título y portada (640 px, por un prefijo no documentado del CDN; si falla, 300 px) a `src/assets/covers/` y escribe `src/data/spotify-tracks.json` (commiteado). En Vercel corre en `prebuild` y nunca frena el deploy; en local es manual.
 - **Una portada por lanzamiento** (single, EP o álbum): `carouselReleases` en `src/data/music.ts`. Debajo de la portada van título, artistas y una línea `EP · Dublucid · 2026`. `selfReleased: true` = sin sello (no se muestra sello ni marcador). EP/álbum → embed de álbum de 352 px (con la lista de temas); single → embed compacto de 152 px; el alto se reserva en `.sp__stage` y cambia con una transición.
   - Lanzamientos compartidos con otros artistas (p. ej. *Three of a Kind #033*, compilado del sello): `ownTracks` con los temas de Shaun. El reproductor toca solo esos, uno por uno (embed compacto + botones para elegir el tema).
@@ -103,6 +103,14 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 - **La escena de la mano y el cigarrillo, y el video del footer.** Se van a sumar en otro lugar. El código está en el tag `v1-diseno-original`; el video de origen (`src/assets/video/hand-drop-source.mp4`, no entra al build) y `scripts/make-media.sh` siguen en el repo. `public/media/` se regenera con `npm run media` (usa `ffmpeg-static`).
 - La galería "In Action" y las tarjetas de lugares.
+
+## Seguridad
+
+- **CSP** con `security.csp` de Astro (`astro.config.mjs`): un `<meta>` por página con hashes de nuestros scripts y estilos, que Astro recalcula en cada build. Directivas: `default-src 'self'`; `script-src` + `open.spotify.com`, `embed-cdn.spotifycdn.com` y `'unsafe-eval'` (la iFrame API de Spotify corre todo con `eval`; decidido el 2026-10-31); `frame-src` con `playerHosts`; `connect-src` y `form-action` con Web3Forms; `img-src 'self' data:`; `font-src 'self'`; `base-uri 'self'`; `object-src 'none'`. Solo se prueba con `build` + `preview` (en `dev` no aplica).
+- **`vercel.json`**: lo que un `<meta>` no puede llevar: `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` y `Permissions-Policy` (sin cámara, micrófono ni geolocalización; `autoplay` y `encrypted-media` para los reproductores). Solo las manda Vercel: comprobar en el deploy con `curl -I <url>`.
+- **Nada de atributos `style` ni `<script>` / `<style>` sueltos fuera de lo que procesa Astro**: si hace falta un valor dinámico, ponerlo desde el script con `el.style.setProperty(...)` (el CSSOM sí está permitido).
+- **Sumar una plataforma de embeds:** agregar el host del iframe a `playerHosts` en `astro.config.mjs` (y a `autoplay`/`encrypted-media` en `vercel.json`), y si carga scripts propios en nuestra página (como la API de Spotify), sus hosts en `scriptDirective.resources`. Después `build` + `preview` y revisar la consola: cualquier violación aparece como "Refused to…".
+- Formularios: `maxlength` en todos los campos, honeypot `botcheck`; la key de Web3Forms es pública por diseño.
 
 ## Forma de trabajar
 
