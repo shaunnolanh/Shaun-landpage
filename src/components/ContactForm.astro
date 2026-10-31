@@ -20,21 +20,23 @@ type Field = {
   type: 'text' | 'email' | 'url' | 'date' | 'textarea';
   required: boolean;
   autocomplete?: 'name' | 'email';
+  /** Caps what a bot (or a paste) can send through the form */
+  maxlength?: number;
 };
 const fields: Field[] =
   variant === 'booking'
     ? [
-        { name: 'name', label: t.form.name, type: 'text', required: true, autocomplete: 'name' },
-        { name: 'email', label: t.form.email, type: 'email', required: true, autocomplete: 'email' },
+        { name: 'name', label: t.form.name, type: 'text', required: true, autocomplete: 'name', maxlength: 100 },
+        { name: 'email', label: t.form.email, type: 'email', required: true, autocomplete: 'email', maxlength: 254 },
         { name: 'date', label: t.form.date, type: 'date', required: false },
-        { name: 'venue', label: t.form.venue, type: 'text', required: true },
-        { name: 'message', label: t.form.message, type: 'textarea', required: true },
+        { name: 'venue', label: t.form.venue, type: 'text', required: true, maxlength: 150 },
+        { name: 'message', label: t.form.message, type: 'textarea', required: true, maxlength: 3000 },
       ]
     : [
-        { name: 'name', label: t.form.name, type: 'text', required: true, autocomplete: 'name' },
-        { name: 'email', label: t.form.email, type: 'email', required: true, autocomplete: 'email' },
-        { name: 'music_link', label: t.form.musicLink, type: 'url', required: true },
-        { name: 'proposal', label: t.form.proposal, type: 'textarea', required: true },
+        { name: 'name', label: t.form.name, type: 'text', required: true, autocomplete: 'name', maxlength: 100 },
+        { name: 'email', label: t.form.email, type: 'email', required: true, autocomplete: 'email', maxlength: 254 },
+        { name: 'music_link', label: t.form.musicLink, type: 'url', required: true, maxlength: 500 },
+        { name: 'proposal', label: t.form.proposal, type: 'textarea', required: true, maxlength: 3000 },
       ];
 ---
 
@@ -60,9 +62,9 @@ const fields: Field[] =
           {f.required && <span aria-hidden="true"> *</span>}
         </label>
         {f.type === 'textarea' ? (
-          <textarea id={id(f.name)} name={f.name} rows="5" required={f.required} />
+          <textarea id={id(f.name)} name={f.name} rows="5" required={f.required} maxlength={f.maxlength} />
         ) : (
-          <input id={id(f.name)} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
+          <input id={id(f.name)} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} maxlength={f.maxlength} />
         )}
       </div>
     ))
