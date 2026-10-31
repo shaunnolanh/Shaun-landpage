@@ -1,7 +1,8 @@
 ---
 // One Spotify player under the carousel, driven by the Spotify iFrame API.
-// The API script loads with the page (the player shows up without a click; the facade is only a
-// placeholder until it's ready, and a click on it means "play"). Then:
+// The API script loads when Music gets close to the screen (~800px before), or on the first interaction,
+// so visitors who never get there don't hit Spotify at all. The player shows up without a click; the
+// facade is only a placeholder until it's ready, and a click on it means "play". Then:
 //   createController(...) once, and on every `track:change` → loadEntity(url?theme=0).
 //   loadEntity stops playback (verified), so if it was playing we call play() on the next `ready`.
 // EPs/albums use the album embed (352px, with its track list); singles the compact one (152px).
@@ -181,8 +182,20 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
       loadApi();
     });
 
-    // Load the player right away, without playing
-    loadApi();
+    // Load the player as Music approaches the viewport, without playing
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
+          loadApi();
+        },
+        { rootMargin: '800px 0px' },
+      );
+      observer.observe(box);
+    } else {
+      loadApi();
+    }
 
     carousel.addEventListener('track:change', (event) => {
       const detail = (event as CustomEvent<Detail>).detail;

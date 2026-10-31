@@ -1,6 +1,8 @@
 ---
-// Player embed: the SoundCloud/Spotify/Mixcloud/Beatport iframe, right in the HTML (it shows up loaded,
-// no click needed). In controlled mode it's a placeholder button instead (see `controlled`).
+// Player embed: the SoundCloud/Spotify/Mixcloud/Beatport iframe, loaded without a click when its section
+// gets within ~800px of the screen (IntersectionObserver), so visitors who never get there don't hit the
+// platform at all. `loading="lazy"` alone isn't enough: Chrome fetches lazy iframes up to 2500px away.
+// Without JS, the <noscript> copy loads normally. In controlled mode it's a placeholder button instead (see `controlled`).
 import type { Embed } from '../data/music';
 import { toEmbed } from '../data/embed';
 import { useTranslations, type Lang } from '../i18n/utils';
@@ -26,7 +28,12 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
 <div class="embed">
   {
     player?.src ? (
-      <iframe src={player.src} title={title} width="100%" height={height} allow="autoplay; encrypted-media" />
+      <>
+        <iframe data-src={player.src} title={title} width="100%" height={height} allow="autoplay; encrypted-media" loading="lazy" />
+        <noscript>
+          <iframe src={player.src} title={title} width="100%" height={height} allow="autoplay; encrypted-media" loading="lazy" />
+        </noscript>
+      </>
     ) : player ? (
       <button class="embed__play" type="button" data-embed-controlled>
         <span class="embed__icon" aria-hidden="true">
@@ -45,6 +52,29 @@ const title = embed.title ?? `${player?.name ?? ''} player`.trim();
     )
   }
 </div>
+
+<script>
+  const frames = document.querySelectorAll<HTMLIFrameElement>('.embed iframe[data-src]');
+  const load = (frame: HTMLIFrameElement) => {
+    frame.src = frame.dataset.src!;
+    frame.removeAttribute('data-src');
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          load(entry.target as HTMLIFrameElement);
+        }
+      },
+      { rootMargin: '800px 0px' },
+    );
+    frames.forEach((frame) => observer.observe(frame));
+  } else {
+    frames.forEach(load);
+  }
+</script>
 
 <style>
   /* No inline `style` (the CSP doesn't allow it): an iframe reserves its height with its `height` attribute;
