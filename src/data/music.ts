@@ -150,7 +150,7 @@ export const carouselReleases: CarouselRelease[] = [
 ];
 
 /** The carousel starts on this release. */
-export const initialRelease = 'Case 701';
+export const initialRelease = carouselReleases.find((release) => !release.hide)?.title; // the newest one
 
 /** Kind and id from any open.spotify.com album/track link (intl-xx/, embed/, ?si=… all accepted). */
 export const spotifyEntity = (link: string) => {

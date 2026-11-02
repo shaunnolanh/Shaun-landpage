@@ -96,7 +96,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
   1. En `carouselReleases`, agregar `{ title, type, artists, label (o selfReleased: true), year, spotify, beatport, tracks }` en su lugar, por fecha de salida (de lo más nuevo a lo más viejo; cada título lleva su fecha en un comentario `// out AAAA-MM-DD`). `spotify` = link del álbum/EP (Compartir → Copiar link del álbum) o, si es single, el del tema; sirve con `intl-es/` y `?si=`. `beatport` = link del release o `null`. `tracks` = títulos de los temas de Shaun (van en el `alt`). Título, tipo, artistas, sello y año van a mano: oEmbed no los da.
   2. `npm run spotify:sync` → baja la portada (una por lanzamiento, `<slug del título>.jpg`) y completa el JSON.
   3. `npm run build`, revisar y commitear `music.ts`, el JSON y la portada nueva.
-  - `hide: true` lo saca del carrusel; `initialRelease` define la portada inicial (hoy el EP *Case 701*).
+  - `hide: true` lo saca del carrusel; el carrusel arranca en el más nuevo (`initialRelease` = el primero visible de la lista), así que un lanzamiento nuevo arriba pasa a ser la portada inicial solo.
 - **Lista de abajo** (`upcoming` en `music.ts`, "Coming soon" / "Próximamente"): solo lo que todavía no salió, del más nuevo al más viejo. Cada fila muestra "ID" (así se le dice en la escena a un tema inédito) en lugar del título, los artistas y el sello (`label`; `null` = marcador `[LABEL]`): sin nombres de temas, año ni etiqueta Upcoming (toda la lista es de lo que viene). `kind` (`remix` / `collab`) es interno. Cuando sale, pasa al carrusel.
 
 ## Fotos e imagen para compartir
