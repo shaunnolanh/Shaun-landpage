@@ -1,7 +1,7 @@
 ---
 import SpotifyPlayer from './SpotifyPlayer.astro';
 import TrackCarousel from './TrackCarousel.astro';
-import { beatportProfile, releases } from '../data/music';
+import { beatportProfile, upcoming } from '../data/music';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -27,26 +27,14 @@ const t = useTranslations(lang);
     <h3 class="music__subtitle reveal">{t.music.releases}</h3>
     <ul class="releases">
       {
-        releases.map((r) => (
+        upcoming.map((r) => (
           <li class="release">
             <div class="release__main">
-              <p class="release__title">
-                {r.title && r.url ? (
-                  <a href={r.url} target="_blank" rel="noopener">
-                    {r.title}
-                    <span class="visually-hidden"> {r.url.includes('spotify.com') ? t.music.onSpotify : t.music.onBeatport}</span>
-                  </a>
-                ) : (
-                  (r.title ?? <span class="pending">{t.pending.release}</span>)
-                )}
-              </p>
-              <p class="release__artists">{r.artists ?? <span class="pending">{t.pending.artists}</span>}</p>
+              <p class="release__title">{t.music.unreleased}</p>
+              <p class="release__artists">{r.artists}</p>
             </div>
             <div class="release__meta">
-              {r.type === 'remix' && <span class="pill">{t.music.remix}</span>}
-              {r.upcoming && <span class="pill">{t.music.upcoming}</span>}
-              <span class="mono">{r.label ?? <span class="pending">{t.pending.label}</span>}</span>
-              <span class="mono">{r.year ?? <span class="pending">{t.pending.year}</span>}</span>
+              <span class="pill">{t.music.upcoming}</span>
             </div>
           </li>
         ))
@@ -138,15 +126,6 @@ const t = useTranslations(lang);
 
   .release__title {
     font-weight: 600;
-  }
-
-  .release__title a {
-    text-decoration: none;
-    transition: color var(--duration) var(--ease);
-  }
-
-  .release__title a:hover {
-    color: var(--text-70);
   }
 
   .releases__all {

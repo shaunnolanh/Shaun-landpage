@@ -11,8 +11,6 @@ export const en = {
   skipLink: 'Skip to content',
   // Visible markers for data that isn't confirmed yet (`null` in src/data). Shown with the .pending style.
   pending: {
-    release: '[RELEASE PENDING]',
-    artists: '[ARTISTS PENDING]',
     label: '[LABEL]',
     year: '[YEAR]',
     embed: '[EMBED PENDING]',
@@ -43,9 +41,9 @@ export const en = {
     title: 'Music',
     lead: "Swipe through the releases. What's coming next, below.",
     releases: 'Coming soon',
-    remix: 'Remix',
+    /** Shown instead of the title of a track that isn't out yet (the scene's word, same in both languages) */
+    unreleased: 'ID',
     upcoming: 'Upcoming',
-    onBeatport: 'on Beatport',
     carousel: 'Releases',
     select: 'Select',
     prev: 'Previous release',
@@ -56,7 +54,6 @@ export const en = {
     listenOnSpotify: 'Listen on Spotify',
     buyOnBeatport: 'Buy on Beatport',
     previewNote: "Without a Spotify login in this browser, you'll hear a 30-second preview.",
-    onSpotify: 'on Spotify',
     allOnBeatport: 'All tracks on Beatport',
   },
   embed: {

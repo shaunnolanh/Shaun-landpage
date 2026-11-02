@@ -28,7 +28,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 ## Datos y contenido
 
 - `src/data/site.ts`: press kit por idioma (`pressKit.en` / `pressKit.es`), email de booking, `heroVideo` y redes. `src/data/music.ts`: lanzamientos del carrusel, remixes/próximos y sets de Radio Silence.
-- **`null` significa "todavía no confirmado".** El componente muestra entonces un marcador visible, que también es texto y va traducido: `<span class="pending">{t.pending.release}</span>` (EN `[RELEASE PENDING]`, ES `[RELEASE PENDIENTE]`). Los marcadores viven en `pending` de `en.ts` / `es.ts`; nunca escribirlos a mano en un componente.
+- **`null` significa "todavía no confirmado".** El componente muestra entonces un marcador visible, que también es texto y va traducido: `<span class="pending">{t.pending.label}</span>` (EN `[LABEL]`, ES `[SELLO]`). Los marcadores viven en `pending` de `en.ts` / `es.ts`; nunca escribirlos a mano en un componente.
 - Nunca inventar releases, sellos, fechas, supports ni citas. Si un dato no está confirmado, el campo queda en `null`.
 - Los archivos de i18n son TS, no JSON, para poder dejar comentarios "TO CONFIRM" al lado de los datos sin verificar.
 - About muestra los tres párrafos de `about.long`; `about.short` repite su comienzo y no se muestra (queda para el press kit).
@@ -97,7 +97,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
   2. `npm run spotify:sync` → baja la portada (una por lanzamiento, `<slug del título>.jpg`) y completa el JSON.
   3. `npm run build`, revisar y commitear `music.ts`, el JSON y la portada nueva.
   - `hide: true` lo saca del carrusel; `initialRelease` define la portada inicial (hoy el EP *Case 701*).
-- **Lista de abajo** (`releases`): solo remixes y próximos ("Remixes & Coming soon").
+- **Lista de abajo** (`upcoming` en `music.ts`, "Coming soon" / "Próximamente"): solo lo que todavía no salió, del más nuevo al más viejo. Cada fila muestra "ID" (así se le dice en la escena a un tema inédito) en lugar del título, los artistas y la etiqueta Upcoming: sin nombres de temas, sello ni año. `kind` (`remix` / `collab`) es interno. Cuando sale, pasa al carrusel.
 
 ## Fotos e imagen para compartir
 

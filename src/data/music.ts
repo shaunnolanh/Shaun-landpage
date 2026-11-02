@@ -15,14 +15,13 @@ export type Embed = {
   title: string | null;
 };
 
-export type Release = {
-  title: string | null;
-  artists: string | null;
-  label: string | null;
-  year: number | null;
-  type: 'original' | 'remix';
-  upcoming?: boolean;
-  url?: string | null;
+/**
+ * Something not out yet. The site shows "ID" (the scene's word for an unreleased track) instead of a title,
+ * the artists and an "Upcoming" tag: no track names, label or year. `kind` is for us, it isn't shown.
+ */
+export type UpcomingRelease = {
+  artists: string;
+  kind: 'remix' | 'collab';
 };
 
 // ─── Carousel (Music): Shaun's releases (singles, EPs, albums), one cover each, no remixes ──────────
@@ -160,13 +159,15 @@ export const coverSlug = (title: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-// List under the carousel: only what's coming (remixes, collabs…). Once out, a release moves to the carousel. `url` = Beatport or Spotify link of the track, if any.
 export const beatportProfile = 'https://www.beatport.com/artist/shaun-nolanh/1291888';
 
-export const releases: Release[] = [
-  // Coming soon. Released music lives in `carouselReleases` (the carousel).
-  { title: 'Neverl3vel (Shaun Nolanh Remix)', artists: 'Roberto Caceres & Jose Tabarez', label: null, year: null, type: 'remix', upcoming: true },
-  { title: null, artists: 'Shaun Nolanh & Praneeth.D', label: null, year: null, type: 'original', upcoming: true },
+// List under the carousel: only what's coming (remixes, collabs…), newest first. Once out, a release moves
+// to the carousel (`carouselReleases`).
+export const upcoming: UpcomingRelease[] = [
+  { artists: 'D.Akkord', kind: 'remix' },
+  // Neverl3vel (Shaun Nolanh Remix): the title isn't shown until it's out
+  { artists: 'Roberto Caceres & Jose Tabarez', kind: 'remix' },
+  { artists: 'Shaun Nolanh & Praneeth.D', kind: 'collab' },
 ];
 
 // Radio Silence: one set for now, full width. Add more objects here as new sets come out

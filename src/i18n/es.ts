@@ -11,8 +11,6 @@ export const es: Dictionary = {
   skipLink: 'Ir al contenido',
   // Marcadores visibles para datos sin confirmar (`null` en src/data). Se muestran con el estilo .pending.
   pending: {
-    release: '[RELEASE PENDIENTE]',
-    artists: '[ARTISTAS PENDIENTES]',
     label: '[SELLO]',
     year: '[AÑO]',
     embed: '[EMBED PENDIENTE]',
@@ -43,9 +41,9 @@ export const es: Dictionary = {
     title: 'Música',
     lead: 'Pasá por los lanzamientos. Abajo, lo que viene.',
     releases: 'Próximamente',
-    remix: 'Remix',
+    /** Va en lugar del título de un tema que todavía no salió (así se dice en la escena, igual en los dos idiomas) */
+    unreleased: 'ID',
     upcoming: 'Próximamente',
-    onBeatport: 'en Beatport',
     carousel: 'Lanzamientos',
     select: 'Seleccionar',
     prev: 'Lanzamiento anterior',
@@ -56,7 +54,6 @@ export const es: Dictionary = {
     listenOnSpotify: 'Escuchar en Spotify',
     buyOnBeatport: 'Comprar en Beatport',
     previewNote: 'Sin sesión de Spotify en el navegador, se escuchan 30 segundos.',
-    onSpotify: 'en Spotify',
     allOnBeatport: 'Todos los tracks en Beatport',
   },
   embed: {
