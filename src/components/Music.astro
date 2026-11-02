@@ -33,9 +33,6 @@ const t = useTranslations(lang);
               <p class="release__title">{t.music.unreleased}</p>
               <p class="release__artists">{r.artists}</p>
             </div>
-            <div class="release__meta">
-              <span class="pill">{t.music.upcoming}</span>
-            </div>
           </li>
         ))
       }
@@ -148,18 +145,4 @@ const t = useTranslations(lang);
     color: var(--text-70);
   }
 
-  .release__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-xs) var(--space-s);
-    color: var(--text-60);
-  }
-
-  @media (min-width: 48rem) {
-    .release {
-      grid-template-columns: 1fr auto;
-      align-items: center;
-    }
-  }
 </style>

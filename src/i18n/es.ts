@@ -43,7 +43,6 @@ export const es: Dictionary = {
     releases: 'Próximamente',
     /** Va en lugar del título de un tema que todavía no salió (así se dice en la escena, igual en los dos idiomas) */
     unreleased: 'ID',
-    upcoming: 'Próximamente',
     carousel: 'Lanzamientos',
     select: 'Seleccionar',
     prev: 'Lanzamiento anterior',

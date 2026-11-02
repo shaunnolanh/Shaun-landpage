@@ -43,7 +43,6 @@ export const en = {
     releases: 'Coming soon',
     /** Shown instead of the title of a track that isn't out yet (the scene's word, same in both languages) */
     unreleased: 'ID',
-    upcoming: 'Upcoming',
     carousel: 'Releases',
     select: 'Select',
     prev: 'Previous release',

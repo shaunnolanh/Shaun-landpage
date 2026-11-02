@@ -17,7 +17,8 @@ export type Embed = {
 
 /**
  * Something not out yet. The site shows "ID" (the scene's word for an unreleased track) instead of a title,
- * the artists and an "Upcoming" tag: no track names, label or year. `kind` is for us, it isn't shown.
+ * and the artists: no track names, label, year or "upcoming" tag (the whole list is upcoming). `kind` is for
+ * us, it isn't shown.
  */
 export type UpcomingRelease = {
   artists: string;

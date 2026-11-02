@@ -97,7 +97,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
   2. `npm run spotify:sync` → baja la portada (una por lanzamiento, `<slug del título>.jpg`) y completa el JSON.
   3. `npm run build`, revisar y commitear `music.ts`, el JSON y la portada nueva.
   - `hide: true` lo saca del carrusel; `initialRelease` define la portada inicial (hoy el EP *Case 701*).
-- **Lista de abajo** (`upcoming` en `music.ts`, "Coming soon" / "Próximamente"): solo lo que todavía no salió, del más nuevo al más viejo. Cada fila muestra "ID" (así se le dice en la escena a un tema inédito) en lugar del título, los artistas y la etiqueta Upcoming: sin nombres de temas, sello ni año. `kind` (`remix` / `collab`) es interno. Cuando sale, pasa al carrusel.
+- **Lista de abajo** (`upcoming` en `music.ts`, "Coming soon" / "Próximamente"): solo lo que todavía no salió, del más nuevo al más viejo. Cada fila muestra "ID" (así se le dice en la escena a un tema inédito) en lugar del título y los artistas: sin nombres de temas, sello, año ni etiqueta Upcoming (toda la lista es de lo que viene). `kind` (`remix` / `collab`) es interno. Cuando sale, pasa al carrusel.
 
 ## Fotos e imagen para compartir
 
