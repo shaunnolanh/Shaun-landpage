@@ -41,8 +41,8 @@ export const en = {
   },
   music: {
     title: 'Music',
-    lead: "Swipe through the releases. Remixes and what's next below.",
-    releases: 'Remixes & Coming soon',
+    lead: "Swipe through the releases. What's coming next, below.",
+    releases: 'Coming soon',
     remix: 'Remix',
     upcoming: 'Upcoming',
     onBeatport: 'on Beatport',

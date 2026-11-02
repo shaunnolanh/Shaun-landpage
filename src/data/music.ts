@@ -160,21 +160,13 @@ export const coverSlug = (title: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-// List under the carousel: remixes and upcoming releases. `url` = Beatport or Spotify link of the track, if any.
+// List under the carousel: only what's coming (remixes, collabs…). Once out, a release moves to the carousel. `url` = Beatport or Spotify link of the track, if any.
 export const beatportProfile = 'https://www.beatport.com/artist/shaun-nolanh/1291888';
 
 export const releases: Release[] = [
-  // Remixes & coming soon. Shaun's own releases live in `carouselReleases` (the carousel).
+  // Coming soon. Released music lives in `carouselReleases` (the carousel).
   { title: 'Neverl3vel (Shaun Nolanh Remix)', artists: 'Roberto Caceres & Jose Tabarez', label: null, year: null, type: 'remix', upcoming: true },
   { title: null, artists: 'Shaun Nolanh & Praneeth.D', label: null, year: null, type: 'original', upcoming: true },
-  {
-    title: "Paul's Tape (Shaun Nolanh Remix)",
-    artists: 'Valentín Ciancio',
-    label: '3rd Avenue',
-    year: 2026,
-    type: 'remix',
-    url: 'https://open.spotify.com/intl-es/track/32RzcH0HqLePY1f8gvJ0NN?si=2c322e8ea8264c47',
-  },
 ];
 
 // Radio Silence: one set for now, full width. Add more objects here as new sets come out

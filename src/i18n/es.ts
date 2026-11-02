@@ -41,8 +41,8 @@ export const es: Dictionary = {
   },
   music: {
     title: 'Música',
-    lead: 'Pasá por los lanzamientos. Abajo, remixes y lo que viene.',
-    releases: 'Remixes y próximamente',
+    lead: 'Pasá por los lanzamientos. Abajo, lo que viene.',
+    releases: 'Próximamente',
     remix: 'Remix',
     upcoming: 'Próximamente',
     onBeatport: 'en Beatport',
