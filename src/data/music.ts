@@ -24,7 +24,7 @@ export type UpcomingRelease = {
   kind: 'remix' | 'collab';
 };
 
-// ─── Carousel (Music): Shaun's releases (singles, EPs, albums), one cover each, no remixes ──────────
+// ─── Carousel (Music): Shaun's releases (singles, EPs, albums and released remixes), one cover each ─
 // CÓMO SUMAR UN LANZAMIENTO: agregalo acá (de lo más nuevo a lo más viejo) con el link de Spotify del
 // álbum/EP (Compartir → Copiar link del álbum) o, si es un single, el del tema; corré `npm run spotify:sync`
 // (baja la portada a src/assets/covers/ y completa src/data/spotify-tracks.json) y commiteá todo.
@@ -85,6 +85,17 @@ export const carouselReleases: CarouselRelease[] = [
     // TO CONFIRM: track link until the team sends the EP's Beatport link
     beatport: 'https://www.beatport.com/track/case-701/30654526',
     tracks: ['Ultimate Desire', 'Case 701'],
+  },
+  {
+    // Out on 2026-10-05 (Spotify), between Case 701 and I Drove All Night
+    title: "Paul's Tape (Shaun Nolanh Remix)",
+    type: 'single',
+    artists: 'Valentín Ciancio',
+    label: '3rd Avenue',
+    year: 2026,
+    spotify: 'https://open.spotify.com/track/32RzcH0HqLePY1f8gvJ0NN',
+    beatport: 'https://www.beatport.com/track/pauls-tape/30654134',
+    tracks: ["Paul's Tape (Shaun Nolanh Remix)"],
   },
   {
     title: 'I Drove All Night to Feel This',
