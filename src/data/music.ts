@@ -54,9 +54,10 @@ export type CarouselRelease = {
 };
 
 // Titles, types and track counts: Spotify's public album pages (2026-10-27). Labels/years: Beatport list + team.
+// Newest first, by Spotify's release date (the `// out` comment on each title).
 export const carouselReleases: CarouselRelease[] = [
   {
-    title: 'Hibiki',
+    title: 'Hibiki', // out 2026-10-24
     type: 'EP',
     artists: 'Shaun Nolanh',
     label: 'Dublucid',
@@ -66,18 +67,7 @@ export const carouselReleases: CarouselRelease[] = [
     tracks: ['Hibiki', 'Hyōka', 'Kasumi'],
   },
   {
-    title: 'Sky Burns Gold',
-    type: 'single',
-    artists: 'Shaun Nolanh',
-    label: null,
-    selfReleased: true,
-    year: 2026,
-    spotify: 'https://open.spotify.com/intl-es/track/6mQ9MUjChsWguS0CQNRqEJ?si=7b7ac38699024580',
-    beatport: null,
-    tracks: ['Sky Burns Gold'],
-  },
-  {
-    title: 'Case 701',
+    title: 'Case 701', // out 2026-10-23
     type: 'EP',
     artists: 'Stan Seba, Shaun Nolanh',
     label: '3rd Avenue',
@@ -88,8 +78,7 @@ export const carouselReleases: CarouselRelease[] = [
     tracks: ['Ultimate Desire', 'Case 701'],
   },
   {
-    // Out on 2026-10-05 (Spotify), between Case 701 and I Drove All Night
-    title: "Paul's Tape (Shaun Nolanh Remix)",
+    title: "Paul's Tape (Shaun Nolanh Remix)", // out 2026-10-05
     type: 'single',
     artists: 'Valentín Ciancio',
     label: '3rd Avenue',
@@ -99,7 +88,18 @@ export const carouselReleases: CarouselRelease[] = [
     tracks: ["Paul's Tape (Shaun Nolanh Remix)"],
   },
   {
-    title: 'I Drove All Night to Feel This',
+    title: 'Sky Burns Gold', // out 2026-04-19
+    type: 'single',
+    artists: 'Shaun Nolanh',
+    label: null,
+    selfReleased: true,
+    year: 2026,
+    spotify: 'https://open.spotify.com/intl-es/track/6mQ9MUjChsWguS0CQNRqEJ?si=7b7ac38699024580',
+    beatport: null,
+    tracks: ['Sky Burns Gold'],
+  },
+  {
+    title: 'I Drove All Night to Feel This', // out 2026-02-27
     type: 'single',
     artists: 'Shaun Nolanh',
     label: 'BBop Music',
@@ -109,7 +109,7 @@ export const carouselReleases: CarouselRelease[] = [
     tracks: ['I Drove All Night to Feel This'],
   },
   {
-    title: 'Chrome Butterflies',
+    title: 'Chrome Butterflies', // out 2025-12-29
     type: 'EP',
     artists: 'Stan Seba, Shaun Nolanh',
     label: '3rd Avenue',
@@ -120,7 +120,7 @@ export const carouselReleases: CarouselRelease[] = [
     tracks: ['Chrome Butterflies', 'Magnetic Bloom', 'Through the Loss'],
   },
   {
-    title: '300 Mg',
+    title: '300 Mg', // out 2025-09-16
     type: 'single',
     artists: 'Shaun Nolanh',
     label: 'Mustache Crew Records',
@@ -131,7 +131,7 @@ export const carouselReleases: CarouselRelease[] = [
   },
   {
     // Label EP with six tracks by three artists: only Shaun's two are played.
-    title: 'Three of a Kind #033',
+    title: 'Three of a Kind #033', // out 2025-04-03
     type: 'EP',
     artists: 'Shaun Nolanh',
     label: '3rd Avenue',
