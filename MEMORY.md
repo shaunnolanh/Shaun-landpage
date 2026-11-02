@@ -9,6 +9,7 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 - **v1 ("luz en la oscuridad") guardada** en el tag y la rama `v1-diseno-original` (pusheados), en `4456779`.
 - Descartados: el layout asimétrico (2026-10-29) y el "layout ancho" (rama local `layout-ancho`, sin push, quedó por si sirve).
 - **Press kit cargado (2026-11-02):** un zip por idioma (PDF + 3 fotos sin metadatos), 9,4 MB EN / 9,5 MB ES. El zip original queda en `references/` (fuera de git).
+- **Music (2026-11-02):** la lista de abajo es solo "Coming soon" (`upcoming`: "ID" + artistas + Upcoming, sin sello ni año; hoy D.Akkord, Roberto Caceres & Jose Tabarez —Neverl3vel—, Shaun Nolanh & Praneeth.D). Paul's Tape (remix) pasó al carrusel, 8 portadas.
 - Faltan: Spotify/RA/Mixcloud en redes, Beatport de los EP. La key de Web3Forms ya está en `.env` (local).
 
 ## Decisiones (y por qué)
@@ -32,6 +33,7 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 - **El minificador fusiona `animation` + `animation-timeline` en un shorthand inválido**: usar longhands.
 - **`astro check`: leer la línea `- N errors`**, no hacer `tail`.
 - **Editar i18n con reemplazos exactos y `assert`** (un `re.sub` mal armado ya copió el archivo entero adentro).
+- El widget de Spotify tarda en pintarse: una captura antes de ~15 s lo muestra angosto (medir el ancho del iframe antes de tocar CSS).
 - `canvas.strokeStyle` no entiende `color-mix()`: para transparencias, `globalAlpha`.
 - Fotos de iPhone: la miniatura del EXIF también tiene un marcador `FFDA`; para comparar la imagen antes/después, recorrer los segmentos del JPEG en orden.
 
