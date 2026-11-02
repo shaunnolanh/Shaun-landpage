@@ -12,6 +12,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const pressKit = site.pressKit[lang];
 ---
 
 <section class="section section--alt" id="contact" aria-labelledby="contact-title">
@@ -27,20 +28,24 @@ const t = useTranslations(lang);
       <h3 class="booking-card__label">{t.contact.bookingLabel}</h3>
       <p class="booking-card__lead">{t.booking.lead}</p>
       <p class="booking-card__email">
-        <ObfuscatedEmail email={site.bookingEmail} subject={t.booking.emailSubject} />
+        <ObfuscatedEmail email={site.bookingEmail} subject={t.booking.emailSubject} lang={lang} />
       </p>
       <div class="booking-card__actions">
         <!-- Opens the booking dialog (BookingDialog); without JS the email above is the way -->
         <a class="btn" href="#contact" data-open-booking>{t.contact.requestDate}</a>
         {
-          site.pressKitUrl ? (
-            <a class="btn" href={site.pressKitUrl} download>
-              {t.booking.pressKit} <span aria-hidden="true">↓</span>
+          pressKit ? (
+            <a class="btn booking-card__download" href={pressKit} download>
+              <span class="booking-card__download-text">
+                {t.booking.pressKit}
+                <span class="booking-card__download-contents">{t.booking.pressKitContents}</span>
+              </span>
+              <span aria-hidden="true">↓</span>
             </a>
           ) : (
             <span class="booking-card__kit">
               <button class="btn" type="button" disabled>{t.booking.pressKitPending}</button>
-              <span class="pending">[PDF PENDIENTE]</span>
+              <span class="pending">{t.pending.pressKit}</span>
             </span>
           )
         }
@@ -126,6 +131,24 @@ const t = useTranslations(lang);
     align-items: center;
     gap: var(--space-s);
     margin-top: var(--space-m);
+  }
+
+  /* Press kit: the label, and under it what the zip has and its size (smaller, not uppercase) */
+  .booking-card__download {
+    padding: 0.6rem 1.25rem;
+  }
+
+  .booking-card__download-text {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .booking-card__download-contents {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: none;
+    color: var(--text-70);
   }
 
   .booking-card__kit {

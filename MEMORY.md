@@ -4,11 +4,12 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 
 ## Estado actual
 
-- Sitio Astro estático y bilingüe (EN `/`, ES `/es/`). Repo: https://github.com/Va-Delivery/Shaun-landpage (SSH vía alias `github-va`). Sin deploy todavía.
+- Sitio Astro estático y bilingüe (EN `/`, ES `/es/`). Repo: https://github.com/shaunnolanh/Shaun-landpage (transferido desde `Va-Delivery` el 2026-11-02; SSH vía alias `github-va`). Sin deploy todavía.
 - **2026-10-29: v2 en la rama `v2`** (pusheada el 2026-10-31, sin mergear a `main`), a partir de una referencia de Figma Make de otro DJ: monocroma, Montserrat, hero con foto + "Book now" (abre el booking en un `<dialog>`), About con retrato, Music (mismo carrusel y reproductor, solo CSS), Radio Silence, redes, Contacto (tarjeta de booking + Collabs). Lighthouse 100/100 mobile y desktop.
 - **v1 ("luz en la oscuridad") guardada** en el tag y la rama `v1-diseno-original` (pusheados), en `4456779` = `main`. `main` no se toca hasta aprobar la v2.
 - Descartados: el layout asimétrico (2026-10-29) y el "layout ancho" (rama local `layout-ancho`, sin push, quedó por si sirve).
-- Faltan: press kit, key de Web3Forms, Spotify/RA/Mixcloud en redes, Beatport de los EP.
+- **Press kit cargado (2026-11-02):** un zip por idioma (PDF + 3 fotos sin metadatos), 9,4 MB EN / 9,5 MB ES. El zip original queda en `references/` (fuera de git).
+- Faltan: Spotify/RA/Mixcloud en redes, Beatport de los EP. La key de Web3Forms ya está en `.env` (local).
 
 ## Decisiones (y por qué)
 
@@ -31,9 +32,8 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 - **El minificador fusiona `animation` + `animation-timeline` en un shorthand inválido**: usar longhands.
 - **`astro check`: leer la línea `- N errors`**, no hacer `tail`.
 - **Editar i18n con reemplazos exactos y `assert`** (un `re.sub` mal armado ya copió el archivo entero adentro).
-- Estilos inyectados en capturas para probar variantes: los de Astro tienen más especificidad (usar `!important` solo en la prueba).
-- El widget de Spotify tarda en pintarse: capturas antes de ~10 s lo muestran angosto.
 - `canvas.strokeStyle` no entiende `color-mix()`: para transparencias, `globalAlpha`.
+- Fotos de iPhone: la miniatura del EXIF también tiene un marcador `FFDA`; para comparar la imagen antes/después, recorrer los segmentos del JPEG en orden.
 
 ## Pendientes
 
@@ -43,7 +43,8 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 - [ ] Galería "In Action" y tarjetas de lugares (fotos y datos reales).
 - [ ] Deploy de preview en Vercel; probar en iPhone real (diálogo, `play()` del reproductor, fundido de idioma). **Cuando llegue el dominio:** `SITE_URL=https://<dominio>` y redeploy.
 - [ ] Links de Beatport de release para Case 701, Chrome Butterflies y Three of a Kind #033 (hoy, link de un tema, `TO CONFIRM`); Hibiki y Sky Burns Gold sin Beatport.
-- [ ] Datos del artista: redes faltantes (llenan `sameAs` y los íconos), press kit, key de Web3Forms.
+- [ ] Datos del artista: redes faltantes (llenan `sameAs` y los íconos).
+- [ ] Al publicar en Cloudflare Pages: cargar `PUBLIC_WEB3FORMS_KEY` y `SITE_URL` en sus variables (el config hoy espera Vercel), y pasar las cabeceras de `vercel.json` a `public/_headers`.
 - [ ] **Antispam de Web3Forms (no activado, decidir):** gratis solo hCaptcha (`<div class="h-captcha" data-captcha="true">` + script `web3forms.com/client/script.js`, y en el panel "Block Spam: hCaptcha"; hay que sumar sus hosts a la CSP). Restringir al dominio, reCAPTCHA y Turnstile son Pro.
 - [ ] **En el deploy:** comprobar las cabeceras de `vercel.json` con `curl -I`.
 - [ ] **Hacer en GitHub (lo hace el equipo):**

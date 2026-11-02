@@ -9,6 +9,18 @@ export const es: Dictionary = {
     ogImageAlt: 'Retrato en blanco y negro de Shaun Nolanh, con su nombre y los géneros que toca.',
   },
   skipLink: 'Ir al contenido',
+  // Marcadores visibles para datos sin confirmar (`null` en src/data). Se muestran con el estilo .pending.
+  pending: {
+    release: '[RELEASE PENDIENTE]',
+    artists: '[ARTISTAS PENDIENTES]',
+    label: '[SELLO]',
+    year: '[AÑO]',
+    embed: '[EMBED PENDIENTE]',
+    email: '[EMAIL PENDIENTE]',
+    pressKit: '[PDF PENDIENTE]',
+    spotify: '[SPOTIFY PENDIENTE]',
+    form: '[FORMULARIO PENDIENTE: falta PUBLIC_WEB3FORMS_KEY]',
+  },
   nav: {
     label: 'Principal',
     about: 'Bio',
@@ -44,7 +56,6 @@ export const es: Dictionary = {
     listenOnSpotify: 'Escuchar en Spotify',
     buyOnBeatport: 'Comprar en Beatport',
     previewNote: 'Sin sesión de Spotify en el navegador, se escuchan 30 segundos.',
-    spotifyPending: '[SPOTIFY PENDIENTE]',
     onSpotify: 'en Spotify',
     allOnBeatport: 'Todos los tracks en Beatport',
   },
@@ -72,6 +83,8 @@ export const es: Dictionary = {
     title: 'Booking',
     lead: 'Para clubes, festivales y showcases. Bajate el press kit o mandame los datos de tu evento.',
     pressKit: 'Descargar press kit',
+    /** Qué trae el zip y cuánto pesa: actualizarlo cuando cambie el zip de public/press-kit/ */
+    pressKitContents: 'PDF + fotos · 9,5 MB',
     pressKitPending: 'Press kit',
     emailSubject: 'Booking — Shaun Nolanh',
   },
@@ -97,7 +110,6 @@ export const es: Dictionary = {
     sending: 'Enviando…',
     success: '¡Gracias! Tu mensaje llegó. Te respondo pronto.',
     error: 'Algo salió mal. Probá de nuevo o escribime por email.',
-    notConfigured: '[FORMULARIO PENDIENTE: falta PUBLIC_WEB3FORMS_KEY]',
     subjectBooking: 'Nuevo pedido de booking — sitio shaunnolanh',
     subjectCollab: 'Nueva propuesta de collab — sitio shaunnolanh',
   },

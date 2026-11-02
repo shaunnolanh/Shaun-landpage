@@ -74,7 +74,7 @@ const fields: Field[] =
     <button class="btn btn--solid" type="submit" disabled={!accessKey}>
       {variant === 'booking' ? t.form.sendBooking : t.form.sendCollab}
     </button>
-    {!accessKey && <p class="pending">{t.form.notConfigured}</p>}
+    {!accessKey && <p class="pending">{t.pending.form}</p>}
     <p class="form__status" role="status" aria-live="polite"></p>
   </div>
 </form>

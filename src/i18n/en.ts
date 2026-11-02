@@ -9,6 +9,18 @@ export const en = {
     ogImageAlt: 'Black-and-white portrait of Shaun Nolanh, with his name and the genres he plays.',
   },
   skipLink: 'Skip to content',
+  // Visible markers for data that isn't confirmed yet (`null` in src/data). Shown with the .pending style.
+  pending: {
+    release: '[RELEASE PENDING]',
+    artists: '[ARTISTS PENDING]',
+    label: '[LABEL]',
+    year: '[YEAR]',
+    embed: '[EMBED PENDING]',
+    email: '[EMAIL PENDING]',
+    pressKit: '[PDF PENDING]',
+    spotify: '[SPOTIFY PENDING]',
+    form: '[FORM PENDING: PUBLIC_WEB3FORMS_KEY missing]',
+  },
   nav: {
     label: 'Main',
     about: 'About',
@@ -44,7 +56,6 @@ export const en = {
     listenOnSpotify: 'Listen on Spotify',
     buyOnBeatport: 'Buy on Beatport',
     previewNote: "Without a Spotify login in this browser, you'll hear a 30-second preview.",
-    spotifyPending: '[SPOTIFY PENDIENTE]',
     onSpotify: 'on Spotify',
     allOnBeatport: 'All tracks on Beatport',
   },
@@ -72,6 +83,8 @@ export const en = {
     title: 'Booking',
     lead: 'For club dates, festivals and showcases. Download the press kit or send the details of your event.',
     pressKit: 'Download press kit',
+    /** What the zip has and its size: update it when the zip in public/press-kit/ changes */
+    pressKitContents: 'PDF + photos · 9.4 MB',
     pressKitPending: 'Press kit',
     emailSubject: 'Booking — Shaun Nolanh',
   },
@@ -97,7 +110,6 @@ export const en = {
     sending: 'Sending…',
     success: 'Thanks! Your message was sent. I’ll get back to you soon.',
     error: 'Something went wrong. Please try again or write by email.',
-    notConfigured: '[FORMULARIO PENDIENTE: falta PUBLIC_WEB3FORMS_KEY]',
     subjectBooking: 'New booking request — shaunnolanh site',
     subjectCollab: 'New collab proposal — shaunnolanh site',
   },

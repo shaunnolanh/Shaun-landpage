@@ -1,9 +1,16 @@
 // Site-wide data. `null` means "we don't have it yet": components show a visible placeholder.
+import type { Lang } from '../i18n/utils';
 
 export const site = {
   name: 'Shaun Nolanh',
-  /** e.g. '/press-kit/shaun-nolanh-press-kit.pdf' (see public/press-kit/README.md) */
-  pressKitUrl: null as string | null,
+  /**
+   * One zip per language (PDF + photos without metadata), in public/press-kit/. To update one, replace the
+   * zip keeping its name and update its size in `booking.pressKit` (en.ts / es.ts).
+   */
+  pressKit: {
+    en: '/press-kit/shaun-nolanh-press-kit-en.zip',
+    es: '/press-kit/shaun-nolanh-press-kit-es.zip',
+  } as Record<Lang, string | null>,
   /** Booking email. It's never printed in the HTML as plain text (see ObfuscatedEmail). */
   bookingEmail: 'ShaunNolanh@gmail.com' as string | null,
   /**

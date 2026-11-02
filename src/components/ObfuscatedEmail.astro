@@ -1,13 +1,17 @@
 ---
 // The address never appears in the HTML as plain text: the parts are stored reversed
 // and joined with JS on the visitor's browser. Simple bots that scrape HTML don't get it.
+import { useTranslations, type Lang } from '../i18n/utils';
+
 interface Props {
   email: string | null;
   /** Pre-filled subject of the mailto: link */
   subject?: string;
+  lang: Lang;
 }
 
-const { email, subject } = Astro.props;
+const { email, subject, lang } = Astro.props;
+const t = useTranslations(lang);
 const reverse = (s: string) => [...s].reverse().join('');
 const [user, domain] = email ? email.split('@') : [];
 ---
@@ -18,7 +22,7 @@ const [user, domain] = email ? email.split('@') : [];
       {user} [at] {domain.replace(/\./g, ' [dot] ')}
     </a>
   ) : (
-    <span class="pending">[EMAIL PENDIENTE]</span>
+    <span class="pending">{t.pending.email}</span>
   )
 }
 

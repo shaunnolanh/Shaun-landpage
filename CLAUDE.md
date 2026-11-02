@@ -26,8 +26,8 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Datos y contenido
 
-- `src/data/site.ts`: URL del press kit, email de booking, `heroVideo` y redes. `src/data/music.ts`: lanzamientos del carrusel, remixes/próximos y sets de Radio Silence.
-- **`null` significa "todavía no confirmado".** El componente muestra entonces un marcador visible, por ejemplo `<span class="pending">[RELEASE PENDIENTE]</span>`.
+- `src/data/site.ts`: press kit por idioma (`pressKit.en` / `pressKit.es`), email de booking, `heroVideo` y redes. `src/data/music.ts`: lanzamientos del carrusel, remixes/próximos y sets de Radio Silence.
+- **`null` significa "todavía no confirmado".** El componente muestra entonces un marcador visible, que también es texto y va traducido: `<span class="pending">{t.pending.release}</span>` (EN `[RELEASE PENDING]`, ES `[RELEASE PENDIENTE]`). Los marcadores viven en `pending` de `en.ts` / `es.ts`; nunca escribirlos a mano en un componente.
 - Nunca inventar releases, sellos, fechas, supports ni citas. Si un dato no está confirmado, el campo queda en `null`.
 - Los archivos de i18n son TS, no JSON, para poder dejar comentarios "TO CONFIRM" al lado de los datos sin verificar.
 - About muestra los tres párrafos de `about.long`; `about.short` repite su comienzo y no se muestra (queda para el press kit).
@@ -73,6 +73,10 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 - **Sets de Radio Silence** (`Sets.astro`, `sets` en `src/data/music.ts`): cada set es un `Embed` (`link` + `title`), sin fecha ni lugar, en un recuadro (borde al 20 %, fondo negro al 40 %, `--radius-2xl`). Hoy, el widget clásico de SoundCloud de 166 px, pegado tal cual. Para sumar otro, agregar un objeto a `sets`.
 - **Redes** (`Socials.astro`): fila centrada de íconos redondos (SVG inline) con las redes de `socials` en `site.ts` que tengan link y un ícono definido. Para sumar una red, completar su `url` (y su ícono, si no está).
 - **Contacto** (`Contact.astro`): tarjeta destacada de booking (email grande, press kit, "Request a date") y, debajo, el formulario de Collabs en una `.card`.
+- **Press kit:** un zip por idioma en `public/press-kit/` (`shaun-nolanh-press-kit-en.zip` / `-es.zip`), cada uno con su PDF y `photos/shaun-nolanh-press-1…3.jpg`. El botón de Contacto baja el del idioma de la página (`download`) y muestra debajo qué trae y cuánto pesa (`booking.pressKitContents`).
+  - **Para actualizarlo:** reemplazar el zip **con el mismo nombre** y cambiar el peso en `booking.pressKitContents` de `en.ts` / `es.ts` (EN con punto, `9.4 MB`; ES con coma, `9,5 MB`; el que muestra Finder). Nombres sin espacios ni tildes, sin `__MACOSX` ni `.DS_Store` (`zip -X -D`).
+  - Fotos **sin metadatos** (EXIF/XMP: modelo, fecha, GPS) y sin recomprimir: `exiftool -all= -tagsfromfile @ -icc_profile` (conserva el perfil de color). Revisar antes que `Orientation` sea normal: si no, borrarla gira la foto.
+  - Cloudflare Pages acepta hasta 25 MB por archivo.
 - **Formularios** (`ContactForm.astro`, `variant: 'booking' | 'collab'`): envían por POST a Web3Forms.
   - La key sale de `PUBLIC_WEB3FORMS_KEY` (ver `.env.example`). Sin la key, el botón de enviar queda deshabilitado y se muestra un marcador pendiente.
   - El honeypot es el campo oculto `botcheck`.
@@ -134,7 +138,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Git
 
-- Repo: `Va-Delivery/Shaun-landpage` en GitHub. `main` = v1 publicada; la v2 se trabaja en la rama `v2` y se mergea a `main` cuando se apruebe. Diseño original: tag y rama `v1-diseno-original`. Remoto por SSH con el alias `github-va` de `~/.ssh/config`: `git@github-va:Va-Delivery/Shaun-landpage.git`.
+- Repo: `shaunnolanh/Shaun-landpage` en GitHub (cuenta de Shaun; antes `Va-Delivery`). `main` = v1 publicada; la v2 se trabaja en la rama `v2` y se mergea a `main` cuando se apruebe. Diseño original: tag y rama `v1-diseno-original`. Remoto por SSH con el alias `github-va` de `~/.ssh/config`: `git@github-va:shaunnolanh/Shaun-landpage.git`.
 - Commits solo cuando se piden; push solo cuando se pide explícitamente.
 - Mensajes claros, en inglés y en imperativo: una primera línea corta con el qué ("Add booking form validation") y, si hace falta, un cuerpo con el porqué.
 - Antes de cada commit, revisar `git status` / `git diff --cached`: nada de secretos (`.env`), material de terceros (`references/`) ni archivos pesados innecesarios.

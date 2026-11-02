@@ -37,7 +37,7 @@ const items = carouselReleases
       uri: meta?.uri ?? null,
       own: own?.length ? JSON.stringify(own) : undefined,
       // `EP · Dublucid · 2026`; self-released: `Single · 2026` (no label, no placeholder)
-      meta: [t.music.types[release.type], release.selfReleased ? null : (release.label ?? '[SELLO]'), release.year ?? '[AÑO]'].filter(Boolean).join(' · '),
+      meta: [t.music.types[release.type], release.selfReleased ? null : (release.label ?? t.pending.label), release.year ?? t.pending.year].filter(Boolean).join(' · '),
     };
   });
 

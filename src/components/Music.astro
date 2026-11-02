@@ -37,16 +37,16 @@ const t = useTranslations(lang);
                     <span class="visually-hidden"> {r.url.includes('spotify.com') ? t.music.onSpotify : t.music.onBeatport}</span>
                   </a>
                 ) : (
-                  (r.title ?? <span class="pending">[RELEASE PENDIENTE]</span>)
+                  (r.title ?? <span class="pending">{t.pending.release}</span>)
                 )}
               </p>
-              <p class="release__artists">{r.artists ?? <span class="pending">[ARTISTAS PENDIENTES]</span>}</p>
+              <p class="release__artists">{r.artists ?? <span class="pending">{t.pending.artists}</span>}</p>
             </div>
             <div class="release__meta">
               {r.type === 'remix' && <span class="pill">{t.music.remix}</span>}
               {r.upcoming && <span class="pill">{t.music.upcoming}</span>}
-              <span class="mono">{r.label ?? <span class="pending">[SELLO]</span>}</span>
-              <span class="mono">{r.year ?? <span class="pending">[AÑO]</span>}</span>
+              <span class="mono">{r.label ?? <span class="pending">{t.pending.label}</span>}</span>
+              <span class="mono">{r.year ?? <span class="pending">{t.pending.year}</span>}</span>
             </div>
           </li>
         ))

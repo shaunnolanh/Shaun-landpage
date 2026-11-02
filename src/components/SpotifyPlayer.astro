@@ -49,7 +49,7 @@ const startHeight = start.type === 'single' || start.ownTracks ? HEIGHT.compact 
     </div>
     <!-- createController replaces this element with Spotify's iframe -->
     <div class="sp__frame" data-frame hidden><div data-mount></div></div>
-    <p class="sp__pending" data-pending hidden={!!startSpotify}><span class="pending">{t.music.spotifyPending}</span></p>
+    <p class="sp__pending" data-pending hidden={!!startSpotify}><span class="pending">{t.pending.spotify}</span></p>
   </div>
 
   <p class="sp__note mono">{t.music.previewNote}</p>
