@@ -9,8 +9,8 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Stack y estructura
 
-- Astro (sitio estático) con CSS propio, sin framework de UI. Deploy en **Cloudflare Pages**: producción = `main` en https://shaun-nolanh.pages.dev; cada rama tiene su preview en `<rama>.shaun-nolanh.pages.dev`.
-- Variables en Cloudflare Pages (Settings → Variables): `SITE_URL` (`https://shaun-nolanh.pages.dev` hasta que haya dominio; sin ella, canonical/OG/sitemap apuntan a localhost), `PUBLIC_WEB3FORMS_KEY` y `NODE_VERSION=24` (igual que `.node-version`).
+- Astro (sitio estático) con CSS propio, sin framework de UI. Deploy en **Cloudflare Pages**: producción = `main` en https://shaun-landpage.pages.dev; cada rama tiene su preview en `<rama>.shaun-landpage.pages.dev`.
+- Variables en Cloudflare Pages (Settings → Variables): `SITE_URL` (`https://shaun-landpage.pages.dev` hasta que haya dominio; sin ella, canonical/OG/sitemap apuntan a localhost), `PUBLIC_WEB3FORMS_KEY` y `NODE_VERSION=24` (igual que `.node-version`).
 - Bilingüe: EN es el idioma principal y va en `/`; ES va en `/es/`.
 - `src/pages/index.astro` y `src/pages/es/index.astro` renderizan `src/components/HomePage.astro` y solo le pasan el prop `lang`.
 - Orden: Header · Hero · About · Music · Radio Silence (`Sets`) · Redes (`Socials`) · Contacto (`Contact`) · Footer, más `BookingDialog` (el formulario de booking, una sola vez en el HTML).
@@ -140,7 +140,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Git
 
-- Repo: `shaunnolanh/Shaun-landpage` en GitHub (cuenta de Shaun; antes `Va-Delivery`). **`main` es producción** (Cloudflare Pages la publica sola en cada push). Los cambios grandes se hacen en una rama nueva, que se revisa en su preview `<rama>.shaun-nolanh.pages.dev`; **no se pushea a `main` sin el OK del equipo**. La v2 se mergeó a `main` el 2026-11-02 (la rama `v2` queda). Diseño original: tag y rama `v1-diseno-original`. Remoto por SSH con el alias `github-va` de `~/.ssh/config`: `git@github-va:shaunnolanh/Shaun-landpage.git`.
+- Repo: `shaunnolanh/Shaun-landpage` en GitHub (cuenta de Shaun; antes `Va-Delivery`). **`main` es producción** (Cloudflare Pages la publica sola en cada push). Los cambios grandes se hacen en una rama nueva, que se revisa en su preview `<rama>.shaun-landpage.pages.dev`; **no se pushea a `main` sin el OK del equipo**. La v2 se mergeó a `main` el 2026-11-02 (la rama `v2` queda). Diseño original: tag y rama `v1-diseno-original`. Remoto por SSH con el alias `github-va` de `~/.ssh/config`: `git@github-va:shaunnolanh/Shaun-landpage.git`.
 - Commits solo cuando se piden; push solo cuando se pide explícitamente.
 - Mensajes claros, en inglés y en imperativo: una primera línea corta con el qué ("Add booking form validation") y, si hace falta, un cuerpo con el porqué.
 - Antes de cada commit, revisar `git status` / `git diff --cached`: nada de secretos (`.env`), material de terceros (`references/`) ni archivos pesados innecesarios.

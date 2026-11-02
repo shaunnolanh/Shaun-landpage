@@ -7,7 +7,7 @@ import { loadEnv } from 'vite';
 const env = loadEnv('production', new URL('.', import.meta.url).pathname, '');
 
 // The public URL of the site, used for canonical, hreflang, Open Graph, sitemap and robots.
-// SITE_URL comes from Cloudflare Pages → Settings → Variables (https://shaun-nolanh.pages.dev until the real
+// SITE_URL comes from Cloudflare Pages → Settings → Variables (https://shaun-landpage.pages.dev until the real
 // domain exists). Without it (local `astro dev` / `astro build`) it falls back to localhost.
 const site = env.SITE_URL || 'http://localhost:4321';
 
