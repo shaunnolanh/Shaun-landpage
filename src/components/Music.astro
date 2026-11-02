@@ -33,6 +33,7 @@ const t = useTranslations(lang);
               <p class="release__title">{t.music.unreleased}</p>
               <p class="release__artists">{r.artists}</p>
             </div>
+            <span class="release__label mono">{r.label ?? <span class="pending">{t.pending.label}</span>}</span>
           </li>
         ))
       }
@@ -143,6 +144,20 @@ const t = useTranslations(lang);
 
   .release__artists {
     color: var(--text-70);
+  }
+
+  .release__label {
+    color: var(--text-60);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  /* From tablet up, the label sits on the right of the row */
+  @media (min-width: 48rem) {
+    .release {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
   }
 
 </style>

@@ -17,11 +17,13 @@ export type Embed = {
 
 /**
  * Something not out yet. The site shows "ID" (the scene's word for an unreleased track) instead of a title,
- * and the artists: no track names, label, year or "upcoming" tag (the whole list is upcoming). `kind` is for
- * us, it isn't shown.
+ * the artists and the label: no track names, year or "upcoming" tag (the whole list is upcoming). `kind` is
+ * for us, it isn't shown.
  */
 export type UpcomingRelease = {
   artists: string;
+  /** `null` = pending (shows the [LABEL] placeholder) */
+  label: string | null;
   kind: 'remix' | 'collab';
 };
 
@@ -176,10 +178,10 @@ export const beatportProfile = 'https://www.beatport.com/artist/shaun-nolanh/129
 // List under the carousel: only what's coming (remixes, collabs…), newest first. Once out, a release moves
 // to the carousel (`carouselReleases`).
 export const upcoming: UpcomingRelease[] = [
-  { artists: 'D.Akkord', kind: 'remix' },
+  { artists: 'D.Akkord', label: 'Future Avenue', kind: 'remix' },
   // Neverl3vel (Shaun Nolanh Remix): the title isn't shown until it's out
-  { artists: 'Roberto Caceres & Jose Tabarez', kind: 'remix' },
-  { artists: 'Shaun Nolanh & Praneeth.D', kind: 'collab' },
+  { artists: 'Roberto Caceres & Jose Tabarez', label: '3rd Avenue', kind: 'remix' },
+  { artists: 'Shaun Nolanh & Praneeth.D', label: '3rd Avenue', kind: 'collab' },
 ];
 
 // Radio Silence: one set for now, full width. Add more objects here as new sets come out
