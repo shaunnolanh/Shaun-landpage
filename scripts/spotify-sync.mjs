@@ -3,7 +3,7 @@
 //   1. asks open.spotify.com/oembed for the title and cover,
 //   2. downloads the 640px cover once per release to src/assets/covers/<slug>.jpg (falls back to the 300px one),
 //   3. writes src/data/spotify-tracks.json (committed: the build never depends on Spotify answering).
-// Usage: `npm run spotify:sync`. With `--ci` it only runs on Vercel (VERCEL=1) and never fails the build.
+// Usage: `npm run spotify:sync`. With `--ci` it only runs on Cloudflare Pages (CF_PAGES=1) and never fails the build.
 // No dependencies: Node 24 fetch + it imports music.ts directly (TypeScript type stripping).
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +13,7 @@ const COVERS = new URL('src/assets/covers/', ROOT);
 const OUT = new URL('src/data/spotify-tracks.json', ROOT);
 const ci = process.argv.includes('--ci');
 
-if (ci && !process.env.VERCEL) process.exit(0); // local builds use the committed JSON
+if (ci && !process.env.CF_PAGES) process.exit(0); // local builds use the committed JSON
 
 const warn = (msg) => console.warn(`[spotify-sync] ⚠ ${msg}`);
 

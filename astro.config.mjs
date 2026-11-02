@@ -1,20 +1,17 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 // Vite ships with Astro; loadEnv reads .env files, which Astro doesn't expose to this config by itself.
-// With an empty prefix it also includes every process.env variable (e.g. Vercel's), which take precedence.
+// With an empty prefix it also includes every process.env variable (e.g. Cloudflare Pages'), which take precedence.
 import { loadEnv } from 'vite';
 
 const env = loadEnv('production', new URL('.', import.meta.url).pathname, '');
 
 // The public URL of the site, used for canonical, hreflang, Open Graph, sitemap and robots.
-// 1. SITE_URL: set it when the real domain exists (in .env locally, in Vercel → Settings → Environment Variables).
-// 2. VERCEL_PROJECT_PRODUCTION_URL: Vercel sets it on every build (the production domain, or *.vercel.app until there is one; no protocol).
-// 3. Local fallback, so `astro dev` / `astro build` work without any setup.
-const site =
-  env.SITE_URL ||
-  (env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:4321');
+// SITE_URL comes from Cloudflare Pages → Settings → Variables (https://shaun-nolanh.pages.dev until the real
+// domain exists). Without it (local `astro dev` / `astro build`) it falls back to localhost.
+const site = env.SITE_URL || 'http://localhost:4321';
 
-if (!env.SITE_URL && !env.VERCEL_PROJECT_PRODUCTION_URL) {
+if (!env.SITE_URL) {
   console.warn(`[site] SITE_URL is not set: absolute URLs will point to ${site}. Set SITE_URL before deploying elsewhere.`);
 }
 
@@ -31,7 +28,8 @@ export default defineConfig({
   site,
   // Content Security Policy as a <meta> in every page. Astro hashes our own scripts and styles on each build
   // (script-src / style-src), so nothing inline runs unless it's ours. What a <meta> can't carry
-  // (frame-ancestors and the other security headers) goes in vercel.json.
+  // (frame-ancestors and the other security headers) goes in public/_headers (Cloudflare Pages).
+  // If Cloudflare Web Analytics is ever turned on, add its domain (static.cloudflareinsights.com) to the CSP.
   security: {
     csp: {
       directives: [

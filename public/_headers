@@ -1,0 +1,7 @@
+# Cloudflare Pages: headers a <meta> CSP can't carry (the CSP itself is a <meta> Astro writes on every page).
+# Adding a player platform: add its iframe host to autoplay and encrypted-media too (and to playerHosts in astro.config.mjs).
+/*
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), autoplay=(self "https://open.spotify.com" "https://w.soundcloud.com" "https://embed.beatport.com" "https://player-widget.mixcloud.com"), encrypted-media=(self "https://open.spotify.com" "https://w.soundcloud.com" "https://embed.beatport.com" "https://player-widget.mixcloud.com")

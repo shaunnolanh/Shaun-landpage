@@ -9,7 +9,8 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Stack y estructura
 
-- Astro (sitio estático) con CSS propio, sin framework de UI. Deploy en Vercel.
+- Astro (sitio estático) con CSS propio, sin framework de UI. Deploy en **Cloudflare Pages**: producción = `main` en https://shaun-nolanh.pages.dev; cada rama tiene su preview en `<rama>.shaun-nolanh.pages.dev`.
+- Variables en Cloudflare Pages (Settings → Variables): `SITE_URL` (`https://shaun-nolanh.pages.dev` hasta que haya dominio; sin ella, canonical/OG/sitemap apuntan a localhost), `PUBLIC_WEB3FORMS_KEY` y `NODE_VERSION=24` (igual que `.node-version`).
 - Bilingüe: EN es el idioma principal y va en `/`; ES va en `/es/`.
 - `src/pages/index.astro` y `src/pages/es/index.astro` renderizan `src/components/HomePage.astro` y solo le pasan el prop `lang`.
 - Orden: Header · Hero · About · Music · Radio Silence (`Sets`) · Redes (`Socials`) · Contacto (`Contact`) · Footer, más `BookingDialog` (el formulario de booking, una sola vez en el HTML).
@@ -88,7 +89,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 - **Carrusel** (`TrackCarousel.astro`): coverflow nativo, sin dependencias. `scroll-snap` para el swipe, el giro 3D con `animation-timeline: view(inline)` dentro de `@supports` (longhands), reflejo con `-webkit-box-reflect`. Un script chico convierte cada portada en botón "Seleccionar …", maneja flechas/teclado y emite `track:change`. Sin JS: fila de links a Spotify. Reduced motion: sin 3D.
   - El script centra con `slide.offsetLeft`: `.cf__track` tiene `position: relative` para ser el `offsetParent` de las portadas. Sin eso, el carrusel arranca en otra portada en desktop.
 - **Reproductor** (`SpotifyPlayer.astro`): Spotify iFrame API, cargada cuando Music está a ~800 px de la pantalla o con la primera interacción (sin reproducir solo; un clic en la fachada mientras carga = reproducir). Las alturas (`--sp-h`, `--embed-h`) las pone el script, no un atributo `style` (la CSP no lo permite). Al iframe de Spotify se le pone `title` (viene sin él). Cambiar de portada → `loadEntity(url?theme=0)` (álbum o tema); `loadEntity` corta la reproducción, así que si estaba sonando se llama `play()` en el siguiente `ready`. La fachada es `Embed.astro` en modo `controlled`. El reproductor de Spotify queda visible (términos de Spotify); si la API falla o tarda 8 s, link "Escuchar en Spotify".
-- **Sin app de Spotify:** la Web API exige que el dueño tenga Premium. Se usa **oEmbed** (público): `npm run spotify:sync` baja título y portada (640 px, por un prefijo no documentado del CDN; si falla, 300 px) a `src/assets/covers/` y escribe `src/data/spotify-tracks.json` (commiteado). En Vercel corre en `prebuild` y nunca frena el deploy; en local es manual.
+- **Sin app de Spotify:** la Web API exige que el dueño tenga Premium. Se usa **oEmbed** (público): `npm run spotify:sync` baja título y portada (640 px, por un prefijo no documentado del CDN; si falla, 300 px) a `src/assets/covers/` y escribe `src/data/spotify-tracks.json` (commiteado). En Cloudflare Pages (`CF_PAGES=1`) corre en `prebuild` y nunca frena el deploy; en local es manual.
 - **Una portada por lanzamiento** (single, EP o álbum): `carouselReleases` en `src/data/music.ts`. Debajo de la portada van título, artistas y una línea `EP · Dublucid · 2026`. `selfReleased: true` = sin sello (no se muestra sello ni marcador). EP/álbum → embed de álbum de 352 px (con la lista de temas); single → embed compacto de 152 px; el alto se reserva en `.sp__stage` y cambia con una transición.
   - Lanzamientos compartidos con otros artistas (p. ej. *Three of a Kind #033*, compilado del sello): `ownTracks` con los temas de Shaun. El reproductor toca solo esos, uno por uno (embed compacto + botones para elegir el tema).
 - **Cómo sumar un lanzamiento al carrusel:**
@@ -111,9 +112,10 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 ## Seguridad
 
 - **CSP** con `security.csp` de Astro (`astro.config.mjs`): un `<meta>` por página con hashes de nuestros scripts y estilos, que Astro recalcula en cada build. Directivas: `default-src 'self'`; `script-src` + `open.spotify.com`, `embed-cdn.spotifycdn.com` y `'unsafe-eval'` (la iFrame API de Spotify corre todo con `eval`; decidido el 2026-10-31); `frame-src` con `playerHosts`; `connect-src` y `form-action` con Web3Forms; `img-src 'self' data:`; `font-src 'self'`; `base-uri 'self'`; `object-src 'none'`. Solo se prueba con `build` + `preview` (en `dev` no aplica).
-- **`vercel.json`**: lo que un `<meta>` no puede llevar: `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` y `Permissions-Policy` (sin cámara, micrófono ni geolocalización; `autoplay` y `encrypted-media` para los reproductores). Solo las manda Vercel: comprobar en el deploy con `curl -I <url>`.
+- **`public/_headers`** (formato de Cloudflare Pages): lo que un `<meta>` no puede llevar: `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` y `Permissions-Policy` (sin cámara, micrófono ni geolocalización; `autoplay` y `encrypted-media` para los reproductores). Solo las manda Cloudflare Pages (no `astro preview`): comprobar en el deploy con `curl -I <url>`.
+- **Si algún día se activa Cloudflare Web Analytics:** sumar su dominio (`static.cloudflareinsights.com`) a la CSP en `astro.config.mjs`, o la CSP lo bloquea.
 - **Nada de atributos `style` ni `<script>` / `<style>` sueltos fuera de lo que procesa Astro**: si hace falta un valor dinámico, ponerlo desde el script con `el.style.setProperty(...)` (el CSSOM sí está permitido).
-- **Sumar una plataforma de embeds:** agregar el host del iframe a `playerHosts` en `astro.config.mjs` (y a `autoplay`/`encrypted-media` en `vercel.json`), y si carga scripts propios en nuestra página (como la API de Spotify), sus hosts en `scriptDirective.resources`. Después `build` + `preview` y revisar la consola: cualquier violación aparece como "Refused to…".
+- **Sumar una plataforma de embeds:** agregar el host del iframe a `playerHosts` en `astro.config.mjs` (y a `autoplay`/`encrypted-media` en `public/_headers`), y si carga scripts propios en nuestra página (como la API de Spotify), sus hosts en `scriptDirective.resources`. Después `build` + `preview` y revisar la consola: cualquier violación aparece como "Refused to…".
 - Formularios: `maxlength` en todos los campos, honeypot `botcheck`; la key de Web3Forms es pública por diseño.
 
 ## Forma de trabajar
@@ -138,7 +140,7 @@ Entre sus próximos lanzamientos se encuentran nuevas colaboraciones con Stan Se
 
 ## Git
 
-- Repo: `shaunnolanh/Shaun-landpage` en GitHub (cuenta de Shaun; antes `Va-Delivery`). `main` = v1 publicada; la v2 se trabaja en la rama `v2` y se mergea a `main` cuando se apruebe. Diseño original: tag y rama `v1-diseno-original`. Remoto por SSH con el alias `github-va` de `~/.ssh/config`: `git@github-va:shaunnolanh/Shaun-landpage.git`.
+- Repo: `shaunnolanh/Shaun-landpage` en GitHub (cuenta de Shaun; antes `Va-Delivery`). **`main` es producción** (Cloudflare Pages la publica sola en cada push). Los cambios grandes se hacen en una rama nueva, que se revisa en su preview `<rama>.shaun-nolanh.pages.dev`; **no se pushea a `main` sin el OK del equipo**. La v2 se mergeó a `main` el 2026-11-02 (la rama `v2` queda). Diseño original: tag y rama `v1-diseno-original`. Remoto por SSH con el alias `github-va` de `~/.ssh/config`: `git@github-va:shaunnolanh/Shaun-landpage.git`.
 - Commits solo cuando se piden; push solo cuando se pide explícitamente.
 - Mensajes claros, en inglés y en imperativo: una primera línea corta con el qué ("Add booking form validation") y, si hace falta, un cuerpo con el porqué.
 - Antes de cada commit, revisar `git status` / `git diff --cached`: nada de secretos (`.env`), material de terceros (`references/`) ni archivos pesados innecesarios.

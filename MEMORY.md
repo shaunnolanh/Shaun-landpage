@@ -4,9 +4,9 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 
 ## Estado actual
 
-- Sitio Astro estático y bilingüe (EN `/`, ES `/es/`). Repo: https://github.com/shaunnolanh/Shaun-landpage (transferido desde `Va-Delivery` el 2026-11-02; SSH vía alias `github-va`). Sin deploy todavía.
-- **2026-10-29: v2 en la rama `v2`** (pusheada el 2026-10-31, sin mergear a `main`), a partir de una referencia de Figma Make de otro DJ: monocroma, Montserrat, hero con foto + "Book now" (abre el booking en un `<dialog>`), About con retrato, Music (mismo carrusel y reproductor, solo CSS), Radio Silence, redes, Contacto (tarjeta de booking + Collabs). Lighthouse 100/100 mobile y desktop.
-- **v1 ("luz en la oscuridad") guardada** en el tag y la rama `v1-diseno-original` (pusheados), en `4456779` = `main`. `main` no se toca hasta aprobar la v2.
+- Sitio Astro estático y bilingüe (EN `/`, ES `/es/`). Repo: https://github.com/shaunnolanh/Shaun-landpage (transferido desde `Va-Delivery` el 2026-11-02; SSH vía alias `github-va`, con la llave de Va-Delivery). Publicado en Cloudflare Pages: https://shaun-nolanh.pages.dev (`main`).
+- **v2 en producción** (mergeada a `main` por fast-forward el 2026-11-02; la rama `v2` queda), a partir de una referencia de Figma Make de otro DJ: monocroma, Montserrat, hero con foto + "Book now" (abre el booking en un `<dialog>`), About con retrato, Music (mismo carrusel y reproductor, solo CSS), Radio Silence, redes, Contacto (tarjeta de booking + Collabs). Lighthouse 100/100 mobile y desktop.
+- **v1 ("luz en la oscuridad") guardada** en el tag y la rama `v1-diseno-original` (pusheados), en `4456779`.
 - Descartados: el layout asimétrico (2026-10-29) y el "layout ancho" (rama local `layout-ancho`, sin push, quedó por si sirve).
 - **Press kit cargado (2026-11-02):** un zip por idioma (PDF + 3 fotos sin metadatos), 9,4 MB EN / 9,5 MB ES. El zip original queda en `references/` (fuera de git).
 - Faltan: Spotify/RA/Mixcloud en redes, Beatport de los EP. La key de Web3Forms ya está en `.env` (local).
@@ -17,7 +17,7 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 - **v2 monocroma:** negro, `#0a0a0a` y blanco con opacidad; sin degradados de color (el violeta-naranja de la referencia se descartó). El `©` al 55 % porque el 40 % de la referencia no pasa AA.
 - **Hero:** nombre y botón abajo para no tapar la cara. La foto es el LCP: `src/lib/hero-image.ts` arma el `<picture>` y la precarga con los mismos archivos. `site.heroVideo` listo para un video (Higgsfield).
 - **Reproductores sin clic, pero al acercarse** (2026-10-31): cada uno carga a ~800 px de su sección (`IntersectionObserver`), así Spotify/SoundCloud no reciben la IP ni ponen cookies a quien no llega a la música. Al abrir: ~0,2 MB y 0 cookies de terceros (antes ~2,4 MB y 3). El widget de SoundCloud pegado se respeta tal cual (166 px).
-- **Seguridad** (2026-10-31): CSP con `security.csp` de Astro (hashes automáticos) + `vercel.json` para `frame-ancestors` y cabeceras. `'unsafe-eval'` solo porque la iFrame API de Spotify corre con `eval`. Sin atributos `style` en el HTML.
+- **Seguridad** (2026-10-31): CSP con `security.csp` de Astro (hashes automáticos) + `public/_headers` (Cloudflare Pages; antes `vercel.json`) para `frame-ancestors` y cabeceras. `'unsafe-eval'` solo porque la iFrame API de Spotify corre con `eval`. Sin atributos `style` en el HTML.
 - **Booking en `<dialog>` nativo**, una sola vez en el HTML; sin JS, los botones van a `#contact` (email).
 - **About:** solo `about.long` (el `short` repite su comienzo). Dos columnas desde 64rem; en tablet la columna de la bio quedaba muy angosta.
 - **Menú:** hamburguesa hasta 64rem (a 768 no entran cuatro links + EN/ES).
@@ -37,16 +37,15 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumí o borrá lo qu
 
 ## Pendientes
 
-- [ ] Merge de `v2` a `main` cuando se apruebe (la rama ya está en GitHub).
 - [ ] Video del hero (Higgsfield): `site.heroVideo`.
 - [ ] La escena de la mano y el cigarrillo en otro lugar (código en `v1-diseno-original`; `npm run media` regenera `public/media/`).
 - [ ] Galería "In Action" y tarjetas de lugares (fotos y datos reales).
-- [ ] Deploy de preview en Vercel; probar en iPhone real (diálogo, `play()` del reproductor, fundido de idioma). **Cuando llegue el dominio:** `SITE_URL=https://<dominio>` y redeploy.
+- [ ] Probar en iPhone real (diálogo, `play()` del reproductor, fundido de idioma). **Cuando llegue el dominio:** `SITE_URL=https://<dominio>` y redeploy.
 - [ ] Links de Beatport de release para Case 701, Chrome Butterflies y Three of a Kind #033 (hoy, link de un tema, `TO CONFIRM`); Hibiki y Sky Burns Gold sin Beatport.
 - [ ] Datos del artista: redes faltantes (llenan `sameAs` y los íconos).
-- [ ] Al publicar en Cloudflare Pages: cargar `PUBLIC_WEB3FORMS_KEY` y `SITE_URL` en sus variables (el config hoy espera Vercel), y pasar las cabeceras de `vercel.json` a `public/_headers`.
+- [ ] **En Cloudflare Pages (lo carga el equipo):** `SITE_URL=https://shaun-nolanh.pages.dev`, `PUBLIC_WEB3FORMS_KEY` y `NODE_VERSION=24`, y redeploy.
 - [ ] **Antispam de Web3Forms (no activado, decidir):** gratis solo hCaptcha (`<div class="h-captcha" data-captcha="true">` + script `web3forms.com/client/script.js`, y en el panel "Block Spam: hCaptcha"; hay que sumar sus hosts a la CSP). Restringir al dominio, reCAPTCHA y Turnstile son Pro.
-- [ ] **En el deploy:** comprobar las cabeceras de `vercel.json` con `curl -I`.
+- [ ] **En el deploy:** comprobar las cabeceras de `public/_headers` con `curl -I https://shaun-nolanh.pages.dev`.
 - [ ] **Hacer en GitHub (lo hace el equipo):**
   - activar la verificación en dos pasos en la cuenta;
   - activar Dependabot alerts y secret scanning en el repo;
